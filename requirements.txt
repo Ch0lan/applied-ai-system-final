@@ -1,4 +1,4 @@
-pandas
-pytest
-streamlit
-tabulate
+# Runtime: table rendering for the CLI and evaluation output.
+tabulate>=0.9
+# Development: test suite.
+pytest>=7.0
