@@ -13,3 +13,9 @@ venv/
 
 # Pytest cache
 .pytest_cache/
+
+# runtime artifacts
+logs/
+__pycache__/
+*.pyc
+.venv/

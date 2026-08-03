@@ -16,3 +16,38 @@ id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness,po
 15,Moonlit Sonata Dreams,Elena Voss,classical,peaceful,0.20,66,0.52,0.20,0.95,25,1800s,instrumental,False,serene
 16,Velvet Confession,Honey Static,r&b,sultry,0.55,88,0.68,0.70,0.40,65,2020s,english,True,sultry
 17,Cherry Blossom Skyline,Yuna Prism,k-pop,joyful,0.80,126,0.90,0.85,0.12,80,2020s,korean,False,euphoric
+18,Paper Planes Over Kyoto,Yuna Prism,k-pop,happy,0.78,120,0.86,0.83,0.20,74,2020s,korean,False,uplifting
+19,Deadline Sprint,LoRoom,lofi,focused,0.44,84,0.52,0.61,0.74,48,2020s,instrumental,False,productive
+20,Quiet Desk Lamp,Paper Lanterns,lofi,focused,0.33,70,0.55,0.52,0.88,38,2020s,instrumental,False,calm
+21,Thunder Gym Cycle,Max Pulse,edm,intense,0.94,140,0.72,0.89,0.06,81,2020s,english,False,pumped
+22,Barbell Gospel,Rae Solstice,hip-hop,intense,0.89,102,0.58,0.84,0.08,70,2020s,english,True,pumped
+23,Sunday Slow Roast,Slow Stereo,jazz,relaxed,0.31,84,0.69,0.50,0.91,32,1990s,english,False,soothing
+24,Blue Note Curfew,Miles Ardent,jazz,moody,0.40,96,0.44,0.53,0.80,36,1960s,instrumental,False,smoky
+25,Neon Rain Highway,Neon Echo,synthwave,moody,0.72,112,0.45,0.71,0.18,56,2010s,english,False,nostalgic
+26,Analog Heartbeat,Volt Circuit,synthwave,euphoric,0.83,124,0.79,0.86,0.09,68,2010s,instrumental,False,euphoric
+27,Cathedral of Static,Grave Chorus,metal,intense,0.96,160,0.30,0.52,0.04,44,2020s,english,True,furious
+28,Winter Fields,Elena Voss,classical,peaceful,0.18,58,0.48,0.18,0.97,22,1800s,instrumental,False,serene
+29,Morning Adagio,Clara Nyquist,classical,peaceful,0.22,64,0.56,0.22,0.94,28,2000s,instrumental,False,serene
+30,Slow Burn Letter,Honey Static,r&b,sultry,0.50,82,0.64,0.68,0.45,60,2020s,english,False,sultry
+31,Porchlight Goodbye,Sable Creek,country,sad,0.38,92,0.32,0.44,0.62,46,2000s,english,False,wistful
+32,Long Way From Tulsa,Sable Creek,country,nostalgic,0.52,104,0.58,0.50,0.48,52,2010s,english,False,wistful
+33,Festival Fireflies,Indigo Parade,indie pop,happy,0.71,118,0.80,0.78,0.38,58,2010s,english,False,warm
+34,Static Bloom,Indigo Parade,indie rock,moody,0.64,110,0.42,0.61,0.30,49,2020s,english,False,brooding
+35,Corazon Electrico,Mar Adentro,latin pop,joyful,0.85,128,0.88,0.90,0.14,76,2020s,spanish,False,euphoric
+36,Noche de Lluvia,Mar Adentro,latin pop,sad,0.42,88,0.34,0.60,0.58,54,2010s,spanish,False,wistful
+37,Tokyo Underpass,Kanata Line,city pop,nostalgic,0.68,114,0.66,0.74,0.24,44,1980s,japanese,False,nostalgic
+38,Harbor Lights 1984,Kanata Line,city pop,happy,0.73,120,0.82,0.77,0.21,47,1980s,japanese,False,warm
+39,Deep Field Drift,Orbit Bloom,ambient,chill,0.24,56,0.60,0.35,0.93,26,2020s,instrumental,False,dreamy
+40,Signal From Europa,Orbit Bloom,ambient,focused,0.30,62,0.50,0.38,0.90,29,2020s,instrumental,False,calm
+41,Concrete Sermon,Kilo Verse,hip-hop,confident,0.72,92,0.55,0.83,0.10,66,2010s,english,True,bold
+42,Block Party Dawn,Kilo Verse,hip-hop,happy,0.78,98,0.76,0.87,0.12,69,2020s,english,False,uplifting
+43,Amp Feedback Waltz,Voltline,rock,moody,0.70,138,0.40,0.58,0.16,51,2000s,english,False,brooding
+44,Overdrive Sunrise,Voltline,rock,intense,0.93,156,0.52,0.64,0.07,64,2020s,english,False,aggressive
+45,Glass Ballroom,Clara Nyquist,classical,moody,0.26,70,0.38,0.25,0.92,20,2010s,instrumental,False,melancholy
+46,Ruta del Sol,Mar Adentro,latin pop,happy,0.74,116,0.83,0.82,0.22,63,2020s,spanish,False,warm
+47,Autopista Nocturna,Los Faros,latin rock,moody,0.69,112,0.46,0.66,0.19,48,2010s,spanish,False,nostalgic
+48,Tarde de Verano,Los Faros,latin pop,relaxed,0.40,94,0.70,0.58,0.66,41,2000s,spanish,False,soothing
+49,Kilometro Cero,Sombra Clara,latin rock,intense,0.88,142,0.54,0.70,0.11,45,2020s,spanish,False,aggressive
+50,Neon Hanul,Yuna Prism,k-pop,confident,0.84,124,0.72,0.86,0.10,77,2020s,korean,False,bold
+51,Seoul Rain Letter,Han Sol Bloom,k-pop,sad,0.46,90,0.33,0.62,0.57,53,2010s,korean,False,wistful
+52,Shibuya Afterglow,Kanata Line,city pop,relaxed,0.58,108,0.68,0.70,0.33,43,1980s,japanese,False,warm
