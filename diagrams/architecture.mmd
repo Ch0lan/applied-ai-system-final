@@ -17,6 +17,7 @@ flowchart TD
         NOG["Refusal NO_GROUNDING<br/>nothing matched the corpus"]
         RANK["recommend (tool)<br/>src/recommender.py<br/>score, rank, artist-diversity cap"]
         C{"critique (tool)<br/>src/guardrails.py<br/>critique_recommendations"}
+        EXP["explain<br/>src/explainer.py<br/>exemplar-constrained voice"]
         REV["revise<br/>hard_filter_explicit / hard_filter_language /<br/>enforce_diversity / switch_to_energy_strategy /<br/>broaden_retrieval / relax_constraints"]
     end
 
@@ -26,6 +27,7 @@ flowchart TD
     end
 
     CAT[("data/songs.csv<br/>52-song catalog")]
+    STY[("data/style/explanation_style.md<br/>phrase table + few-shot exemplars")]
 
     subgraph OBS["Observability - src/trace.py"]
         TR[("logs/traces/RUN_ID.json<br/>step-by-step reasoning trace")]
@@ -35,7 +37,7 @@ flowchart TD
     subgraph HUM["Human + automated checking"]
         EV["src/evaluate.py<br/>10 declared cases, pass/fail + confidence"]
         RPT[("logs/eval_report.md")]
-        T["tests/ - 47 pytest unit + integration tests"]
+        T["tests/ - 60 pytest unit + integration tests"]
         H["Human review of<br/>traces and eval report"]
     end
 
@@ -54,13 +56,16 @@ flowchart TD
     RANK -- "candidate list" --> C
     C -- "violations found<br/>(budget left)" --> REV
     REV -- "tightened / broadened constraints" --> RANK
-    C -- "passed, or budget spent" --> OUT
+    C -- "passed, or budget spent" --> EXP
+    STY --> EXP
+    EXP --> OUT
 
     P -.-> TR
     R -.-> TR
     G -.-> TR
     RANK -.-> TR
     C -.-> TR
+    EXP -.-> TR
     REV -.-> TR
     V -.-> LG
 

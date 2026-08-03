@@ -1,7 +1,7 @@
 {
-  "run_id": "ec8faa44",
+  "run_id": "aeef5ac4",
   "query": "korean music for the gym",
-  "started_at": 1785729615.190784,
+  "started_at": 1785730359.090761,
   "steps": [
     {
       "step": 1,
@@ -72,7 +72,7 @@
     {
       "step": 5,
       "name": "recommend",
-      "elapsed_ms": 1.01,
+      "elapsed_ms": 0.98,
       "detail": {
         "attempt": 1,
         "strategy": "balanced",
@@ -89,7 +89,7 @@
     {
       "step": 6,
       "name": "critique",
-      "elapsed_ms": 1.05,
+      "elapsed_ms": 1.0,
       "detail": {
         "attempt": 1,
         "passed": false,
@@ -101,7 +101,7 @@
     {
       "step": 7,
       "name": "revise",
-      "elapsed_ms": 1.08,
+      "elapsed_ms": 1.03,
       "detail": {
         "attempt": 1,
         "applied": [
@@ -112,7 +112,7 @@
     {
       "step": 8,
       "name": "recommend",
-      "elapsed_ms": 1.11,
+      "elapsed_ms": 1.06,
       "detail": {
         "attempt": 2,
         "strategy": "balanced",
@@ -127,7 +127,7 @@
     {
       "step": 9,
       "name": "critique",
-      "elapsed_ms": 1.13,
+      "elapsed_ms": 1.08,
       "detail": {
         "attempt": 2,
         "passed": false,
@@ -139,7 +139,7 @@
     {
       "step": 10,
       "name": "revise",
-      "elapsed_ms": 1.16,
+      "elapsed_ms": 1.1,
       "detail": {
         "attempt": 2,
         "applied": [
@@ -150,7 +150,7 @@
     {
       "step": 11,
       "name": "recommend",
-      "elapsed_ms": 1.18,
+      "elapsed_ms": 1.13,
       "detail": {
         "attempt": 3,
         "strategy": "balanced",
@@ -165,7 +165,7 @@
     {
       "step": 12,
       "name": "critique",
-      "elapsed_ms": 1.2,
+      "elapsed_ms": 1.15,
       "detail": {
         "attempt": 3,
         "passed": false,
@@ -177,7 +177,7 @@
     {
       "step": 13,
       "name": "finalize",
-      "elapsed_ms": 1.22,
+      "elapsed_ms": 1.16,
       "detail": {
         "status": "returned_with_warnings",
         "revisions": 2,

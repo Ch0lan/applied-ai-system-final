@@ -7,6 +7,7 @@ logs/eval_report.md.
 
     python -m src.evaluate            # run the suite
     python -m src.evaluate --compare  # also compare grounded vs ungrounded baseline
+    python -m src.evaluate --style    # also compare baseline vs specialized explanation voice
     python -m src.evaluate --verbose  # print each failed criterion
 """
 
@@ -19,6 +20,7 @@ from tabulate import tabulate
 
 from src.agent import AgentResult, RecommenderAgent
 from src.baseline import baseline_recommend
+from src.explainer import Explainer, style_metrics
 from src.trace import LOG_DIR, get_logger
 
 REPORT_PATH = os.path.join(LOG_DIR, "eval_report.md")
@@ -234,7 +236,36 @@ def run_comparison(agent: RecommenderAgent):
     return rows
 
 
-def write_report(rows, detail_lines, passed, total, confidences, comparison_rows) -> Optional[str]:
+def run_style_comparison(agent: RecommenderAgent):
+    """
+    Compare the raw scorer explanations (baseline) against the specialized, exemplar-constrained
+    renderings for the same recommendations. Same inputs, same songs - only the voice differs.
+    """
+    explainer = Explainer()
+    raw, styled, samples = [], [], []
+    for query in COMPARE_QUERIES:
+        result = agent.run(query, k=5)
+        for song, _, why in result.recommendations:
+            raw.append(why)
+            styled.append(explainer.render(song, why))
+        if result.recommendations and len(samples) < 3:
+            song, _, why = result.recommendations[0]
+            samples.append((query, song["title"], why, explainer.render(song, why)))
+
+    base_metrics, styled_metrics = style_metrics(raw), style_metrics(styled)
+    rows = [
+        ["explanations compared", int(base_metrics["count"]), int(styled_metrics["count"])],
+        ["mean characters", "%.0f" % base_metrics["mean_chars"], "%.0f" % styled_metrics["mean_chars"]],
+        ["contain score arithmetic", "%.0f%%" % (base_metrics["digit_share"] * 100),
+         "%.0f%%" % (styled_metrics["digit_share"] * 100)],
+        ["address the listener directly", "%.0f%%" % (base_metrics["second_person_share"] * 100),
+         "%.0f%%" % (styled_metrics["second_person_share"] * 100)],
+    ]
+    return rows, samples
+
+
+def write_report(rows, detail_lines, passed, total, confidences, comparison_rows,
+                 style_rows=None, style_samples=None) -> Optional[str]:
     lines = ["# Evaluation report", ""]
     lines.append("`python -m src.evaluate --compare`")
     lines.append("")
@@ -254,6 +285,21 @@ def write_report(rows, detail_lines, passed, total, confidences, comparison_rows
         lines.append("|---|---|---|---|")
         for row in comparison_rows:
             lines.append("| " + " | ".join(str(c) for c in row) + " |")
+
+    if style_rows:
+        lines.append("")
+        lines.append("## Explanation style: baseline scorer output vs specialized rendering")
+        lines.append("")
+        lines.append("| Metric | Baseline (raw scorer) | Specialized (exemplar-constrained) |")
+        lines.append("|---|---|---|")
+        for row in style_rows:
+            lines.append("| " + " | ".join(str(c) for c in row) + " |")
+        if style_samples:
+            lines.append("")
+            for query, title, raw, styled in style_samples:
+                lines.append("- `%s` -> **%s**" % (query, title))
+                lines.append("  - baseline: `%s`" % raw)
+                lines.append("  - specialized: %s" % styled)
 
     lines.append("")
     lines.append("## Per-case detail")
@@ -287,6 +333,8 @@ def main(argv=None) -> int:
                                      description="Run the Resonance evaluation suite.")
     parser.add_argument("--compare", action="store_true",
                         help="also compare grounded output against the ungrounded baseline")
+    parser.add_argument("--style", action="store_true",
+                        help="also compare baseline scorer explanations against the specialized voice")
     parser.add_argument("--verbose", action="store_true", help="print each failed criterion")
     args = parser.parse_args(argv)
 
@@ -310,11 +358,25 @@ def main(argv=None) -> int:
                        headers=["Request", "Ungrounded baseline", "Retrieval-grounded", "Delta"],
                        tablefmt="github"))
 
+    style_rows, style_samples = [], []
+    if args.style:
+        style_rows, style_samples = run_style_comparison(agent)
+        print("\nExplanation style - baseline scorer output vs specialized rendering:\n")
+        print(tabulate(style_rows,
+                       headers=["Metric", "Baseline (raw scorer)", "Specialized"],
+                       tablefmt="github"))
+        for query, title, raw, styled in style_samples:
+            print("\n  %s -> %s" % (query, title))
+            print("    baseline:    %s" % raw)
+            print("    specialized: %s" % styled)
+        print("")
+
     mean_confidence = statistics.mean(confidences) if confidences else 0.0
     print("\n%d/%d cases passed | mean confidence %.2f | traces in logs/traces/" % (
         passed, len(CASES), mean_confidence))
 
-    path = write_report(rows, detail_lines, passed, len(CASES), confidences, comparison_rows)
+    path = write_report(rows, detail_lines, passed, len(CASES), confidences, comparison_rows,
+                        style_rows, style_samples)
     if path:
         print("report written to %s" % path)
 

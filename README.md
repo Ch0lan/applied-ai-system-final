@@ -37,15 +37,15 @@ that checks the finished list before the user sees it.
 | Bad input | crashes or silently degrades | validated, refused with a reason code |
 | Output checking | none | 7 output checks + up to 2 self-revisions |
 | Observability | printed tables | JSON reasoning traces + run log |
-| Evaluation | 2 unit tests | 47 tests + a 10-case evaluation harness with a report |
+| Evaluation | 2 unit tests | 60 tests + a 10-case evaluation harness with a report |
 | Catalog | 17 songs | 52 songs, 5 languages |
 
 ---
 
 ## The AI feature
 
-Resonance implements **three** of the four feature options from the brief, all wired into the
-same request path rather than sitting beside it:
+Resonance implements **all four** feature options from the brief, all wired into the same
+request path rather than sitting beside it:
 
 1. **RAG.** `src/retriever.py` builds a BM25 index over nine listening-context documents in
    two sources. `src/profile_builder.py` merges the retrieved documents' cues into the scoring
@@ -58,6 +58,11 @@ same request path rather than sitting beside it:
 3. **Reliability harness.** `src/guardrails.py` validates input and critiques output;
    `src/evaluate.py` runs a declared suite and writes `logs/eval_report.md`; `src/trace.py`
    persists every run's reasoning to `logs/traces/`.
+4. **Specialized output behavior.** `src/explainer.py` renders the scorer's arithmetic in a
+   constrained listener-facing voice defined by few-shot exemplars in
+   `data/style/explanation_style.md`. It is a style contract in a data file, not a fine-tune —
+   see the honest framing in the stretch-features section — and `--plain` shows the baseline it
+   replaced.
 
 Everything runs locally with no API key and no network call, so the results below reproduce
 exactly.
@@ -90,11 +95,14 @@ Data flows in one pass with one loop in the middle:
 5. **Critique** (`src/guardrails.py::critique_recommendations`) — seven checks: `NO_RESULTS`,
    `SHORT_LIST`, `EXPLICIT_LEAK`, `LANGUAGE_MISS`, `ARTIST_CROWDING`, `ENERGY_DRIFT`,
    `LOW_CONFIDENCE`. Each carries a fix code.
-6. **Revise** — the agent maps fix codes to actions (`hard_filter_explicit`,
+6. **Explain** (`src/explainer.py`) — each surviving song's score components are rendered in the
+   constrained voice from `data/style/explanation_style.md`, so the reason a listener reads is
+   generated from the same arithmetic that ranked the song, never written separately.
+7. **Revise** — the agent maps fix codes to actions (`hard_filter_explicit`,
    `hard_filter_language`, `enforce_diversity`, `switch_to_energy_strategy`,
    `broaden_retrieval`, `relax_constraints`) and re-runs. Twice at most; if violations survive,
    the answer ships **with the warnings printed**, never silently.
-7. **Observe** — every step lands in `logs/traces/<run_id>.json` and `logs/run.log`.
+8. **Observe** — every step lands in `logs/traces/<run_id>.json` and `logs/run.log`.
 
 The human sits at the bottom of the diagram: `src/evaluate.py` and `pytest` produce artifacts
 (`logs/eval_report.md`, traces) that I read to tune the corpus and thresholds. Three of the
@@ -127,9 +135,11 @@ Other entry points:
 ```bash
 python -m src.cli "gym session, loud and hype" --k 4 --trace   # show the reasoning trace
 python -m src.cli "night drive" --json                          # machine-readable output
+python -m src.cli "night drive" --plain                         # raw scorer output, no styled voice
 python -m src.cli --show-sources                                # list the indexed corpus
-python -m src.evaluate --compare                                # evaluation suite + baseline comparison
-python -m pytest -q                                             # 47 unit + integration tests
+python -m src.evaluate --compare                                # evaluation suite + retrieval-impact comparison
+python -m src.evaluate --style                                  # baseline vs specialized explanation voice
+python -m pytest -q                                             # 60 unit + integration tests
 python -m src.main                                              # the original Module 3 demo, still works
 ```
 
@@ -140,6 +150,7 @@ Exit codes: `0` answered, `1` refused or shipped with unresolved warnings, `2` s
 ## Sample interactions
 
 Full transcript of every command below: [`docs/sample_runs.txt`](docs/sample_runs.txt).
+Full evaluation run: [`docs/evaluation_run.txt`](docs/evaluation_run.txt).
 
 ### 1. Plain request → grounded profile → ranked answer
 
@@ -358,20 +369,65 @@ popularity baseline in `src/baseline.py`.
 Unresolved violations are never hidden. If two revisions do not clear a check, the answer prints
 `WARNING - unresolved after N revision(s)` with the codes.
 
-### Layer 3 — tests
+### Layer 3 — human evaluation
+
+Automated criteria check constraints, not taste. I reviewed the top-k for eight requests myself
+against a stated criterion each. Results, in a parseable table:
+
+| # | Test input | Evaluation criteria | Result | Note |
+|---|---|---|---|---|
+| 1 | `"something calm for studying, no lyrics"` | all instrumental, energy < 0.5, no explicit | **Pass** | 5/5 instrumental, energy 0.26-0.44 |
+| 2 | `"gym session, need something loud and hype"` | all energy > 0.8, plausible as a workout queue | **Pass** | 4/4 above 0.89 |
+| 3 | `"clean hip-hop for lifting"` | zero explicit tracks, hip-hop present | **Pass** | explicit hard-filtered; only 1 of 4 is hip-hop, because the clean hip-hop catalog is thin |
+| 4 | `"spanish music for a road trip"` | all Spanish, mid-energy | **Pass** | 4/4 Spanish, energy 0.69-0.88 |
+| 5 | `"sad songs after a breakup"` | mood-congruent, not "cheer up" music, no crisis handling triggered | **Pass** | 4/4 mood `sad`/low valence; answered normally, as intended |
+| 6 | `"korean music for the gym"` | Korean only, or an honest shortfall | **Partial** | correct language, but returns 3 of 5 and one track (energy 0.46) is a poor gym fit; the shortfall is printed |
+| 7 | `"cooking dinner for guests"` | quiet, background-safe, no explicit | **Pass** | jazz-led (3 of 5), energy 0.31-0.58, none explicit |
+| 8 | `"classical for a workout"` | contradictory request handled sensibly | **Partial** | returns zero classical — energy wins over the stated genre; the low confidence (0.38) is the only signal to the user |
+
+Two partials, both real: the catalog cannot satisfy request 6, and request 8 exposes that a
+stated genre is *not* enforced as a hard filter the way a stated language is — a genuine
+inconsistency in the design, recorded in `model_card.md` §11 rather than papered over.
+
+### Layer 4 — tests
 
 ```
 $ python -m pytest -q
-...............................................                          [100%]
-47 passed in 0.04s
+............................................................             [100%]
+60 passed in 0.05s
 ```
 
 `tests/test_recommender.py` (2, from Module 3, still green — the scoring rule was not broken),
-`tests/test_retriever.py` (15), `tests/test_guardrails.py` (16), `tests/test_agent.py` (14).
+`tests/test_retriever.py` (15), `tests/test_guardrails.py` (16), `tests/test_agent.py` (14),
+`tests/test_explainer.py` (13).
+
+### Explanation-voice check (specialization)
+
+```
+$ python -m src.evaluate --style
+
+| Metric                        | Baseline (raw scorer)   | Specialized   |
+|-------------------------------|-------------------------|---------------|
+| explanations compared         | 20                      | 20            |
+| mean characters               | 83                      | 82            |
+| contain score arithmetic      | 100%                    | 0%            |
+| address the listener directly | 0%                      | 100%          |
+
+  something calm for studying, no lyrics -> Quiet Desk Lamp
+    baseline:    genre match (+1.0), mood match (+2.5), energy similarity (+0.92), too acoustic for preference (-0.5), language match (+0.5)
+    specialized: The lofi you asked for, and it lands in a focused mood - a little more acoustic than you usually go.
+
+  gym session, need something loud and hype -> Thunder Gym Cycle
+    baseline:    genre match (+1.0), mood match (+0.5), energy similarity (+2.88)
+    specialized: The edm you asked for, and it lands in an intense mood.
+```
+
+Same songs, same arithmetic, different voice — at the same length. `--plain` returns the
+baseline column.
 
 ### Testing summary
 
-47/47 tests and 10/10 evaluation cases pass, with mean confidence 0.71 on answered requests.
+60/60 tests and 10/10 evaluation cases pass, with mean confidence 0.71 on answered requests.
 The suite passes now, but it did not at first, and the failures were the useful part:
 
 - **Retrieval picked the wrong document.** "gym session, loud and hype" retrieved my personal
@@ -433,10 +489,17 @@ the original 5 tests as a regression check and makes the diff between the two pr
 | **RAG enhancement** — custom documents, two sources, per-source weighting | `data/knowledge/` + `data/knowledge_user/`, `source_weight` in `src/retriever.py`; before/after in the retrieval-impact table above and in `model_card.md` §12 |
 | **Agentic workflow enhancement** — planning, six tool-calls, a decision chain | `src/agent.py`; traces committed in `logs/traces/` and walked through in [`ai_interactions.md`](ai_interactions.md) |
 | **Test harness / evaluation script** — 10 cases, pass/fail + confidence summary | `src/evaluate.py`, report at `logs/eval_report.md` |
+| **Specialization** — few-shot exemplar-constrained output voice, measured against baseline | `data/style/explanation_style.md` + `src/explainer.py`; `python -m src.evaluate --style`; comparison in `model_card.md` §16 |
 
-Not attempted: fine-tuning / model specialization. There is no generative model in this system,
-so a tone-and-style specialization would have been a decorative wrapper rather than a real part
-of the pipeline.
+**Honest framing of the specialization stretch:** there is no generative model anywhere in this
+system, so nothing here is a fine-tune. What `src/explainer.py` demonstrates is the *other*
+option the brief allows — constrained tone and style driven by few-shot exemplars — implemented
+deterministically: the phrase table, the style constraints, and four worked
+`raw → styled` exemplars live in `data/style/explanation_style.md`, the code follows them, and
+editing that document changes every explanation the system produces without a code change. The
+measured difference against the baseline scorer output is in `model_card.md` §16 and reproducible
+with `python -m src.evaluate --style`. Judge it as a style-specialization layer, not as model
+training.
 
 ---
 
@@ -452,13 +515,15 @@ src/
   trace.py           logging and persisted JSON reasoning traces
   evaluate.py        evaluation harness
   baseline.py        ungrounded baseline, for comparison
+  explainer.py       exemplar-constrained rendering of the scorer's reasons
   recommender.py     Module 3 scoring and ranking (unchanged)
   main.py            Module 3 demo script (still runnable)
 data/
   songs.csv          52-song catalog, 5 languages
   knowledge/         8 listening-context documents
   knowledge_user/    personal notes (second retrieval source)
-tests/               47 unit and integration tests
+  style/             the explanation style contract (phrase table + few-shot exemplars)
+tests/               60 unit and integration tests
 diagrams/            architecture.mmd (Mermaid source)
 assets/              architecture.png (rendered)
 docs/sample_runs.txt full transcript of the commands in this README
@@ -471,8 +536,30 @@ logs/                eval_report.md and per-run JSON traces
 
 The graded responsible-AI reflection — how I collaborated with AI, one helpful and one flawed
 suggestion, limitations, misuse, and what surprised me in testing — is in
-[`model_card.md`](model_card.md), sections 10-14. The agent's intermediate reasoning traces are
+[`model_card.md`](model_card.md), sections 11-15. The agent's intermediate reasoning traces are
 in [`ai_interactions.md`](ai_interactions.md).
+
+**Loom walkthrough:** not recorded. All grading evidence in this README is text-based and
+reproducible from the commands above.
+
+## Reflection
+
+What this project taught me about AI and problem-solving is that almost none of the difficulty
+was in the "AI" part. The agent loop — plan, act, critique, revise — worked on its first run.
+Every hard bug lived in the boundary between components: a personal note outranking a workout
+document because it was short, a document's inferred preference being enforced as if the user
+had stated it, a "helpful" relaxation step deleting the one constraint the user cared about.
+The general lesson is that a system that can revise itself needs its revisions checked as
+carefully as its first answer, because a confident self-correction is indistinguishable from a
+confident mistake in the logs.
+
+The second lesson is about evidence. I wrote the evaluation cases after watching the system run,
+so a green 10/10 mostly proves the system is consistent, not that it is good — the four real
+bugs were found by reading traces and by a test that failed for a reason I had not predicted.
+Building the traces early was the single highest-leverage decision in the project.
+
+The graded responsible-AI reflection (AI collaboration, one helpful and one flawed suggestion,
+limitations, misuse, testing surprises) is in [`model_card.md`](model_card.md) §11-15.
 
 ### Portfolio note
 

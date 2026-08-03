@@ -1,12 +1,12 @@
 {
-  "run_id": "178fe07d",
+  "run_id": "a5cb792f",
   "query": "zzzz qqqq wwww vvvv",
-  "started_at": 1785729425.9568372,
+  "started_at": 1785730359.437346,
   "steps": [
     {
       "step": 1,
       "name": "validate_input",
-      "elapsed_ms": 0.01,
+      "elapsed_ms": 0.0,
       "detail": {
         "ok": true,
         "code": "",
@@ -16,7 +16,7 @@
     {
       "step": 2,
       "name": "plan",
-      "elapsed_ms": 0.03,
+      "elapsed_ms": 0.02,
       "detail": {
         "tools": [
           "retrieve",
@@ -30,7 +30,7 @@
     {
       "step": 3,
       "name": "retrieve",
-      "elapsed_ms": 0.06,
+      "elapsed_ms": 0.04,
       "detail": {
         "k": 3,
         "hits": []
@@ -39,7 +39,7 @@
     {
       "step": 4,
       "name": "no_grounding",
-      "elapsed_ms": 0.07,
+      "elapsed_ms": 0.06,
       "detail": {}
     }
   ]

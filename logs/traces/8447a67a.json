@@ -1,7 +1,7 @@
 {
-  "run_id": "73d84837",
-  "query": "gym session, need something loud and hype",
-  "started_at": 1785729425.7512991,
+  "run_id": "8447a67a",
+  "query": "something calm for studying, no lyrics",
+  "started_at": 1785730359.218427,
   "steps": [
     {
       "step": 1,
@@ -30,65 +30,65 @@
     {
       "step": 3,
       "name": "retrieve",
-      "elapsed_ms": 0.07,
+      "elapsed_ms": 0.06,
       "detail": {
         "k": 3,
         "hits": [
-          "workout-high-intensity(11.07)",
-          "personal-late-night-coding(2.74)",
-          "party-social(2.32)"
+          "personal-late-night-coding(4.42)",
+          "sleep-winddown(3.50)",
+          "language-and-culture(3.42)"
         ]
       }
     },
     {
       "step": 4,
       "name": "ground",
-      "elapsed_ms": 0.73,
+      "elapsed_ms": 0.79,
       "detail": {
         "prefs": {
-          "genre": "edm",
-          "mood": "intense",
-          "energy": 0.9,
+          "genre": "lofi",
+          "mood": "focused",
+          "energy": 0.25,
           "likes_acoustic": false,
-          "avoid_explicit": false,
+          "avoid_explicit": true,
           "language": "instrumental"
         },
-        "strategy": "energy-focused",
-        "confidence": 0.733,
+        "strategy": "mood-first",
+        "confidence": 0.515,
         "overrides": [
-          "energy"
+          "energy",
+          "language"
         ],
         "provenance": {
-          "genre": "workout-high-intensity",
-          "mood": "workout-high-intensity",
+          "genre": "personal-late-night-coding",
+          "mood": "personal-late-night-coding",
           "energy": "user request",
-          "likes_acoustic": "workout-high-intensity",
-          "avoid_explicit": "workout-high-intensity",
-          "language": "personal-late-night-coding",
-          "strategy": "workout-high-intensity"
+          "likes_acoustic": "personal-late-night-coding",
+          "avoid_explicit": "personal-late-night-coding",
+          "language": "user request",
+          "strategy": "personal-late-night-coding"
         }
       }
     },
     {
       "step": 5,
       "name": "recommend",
-      "elapsed_ms": 1.17,
+      "elapsed_ms": 1.1,
       "detail": {
         "attempt": 1,
-        "strategy": "energy-focused",
+        "strategy": "mood-first",
         "pool": 52,
         "picks": [
-          "Thunder Gym Cycle",
-          "Bass Drop Odyssey",
-          "Storm Runner",
-          "Barbell Gospel"
+          "Quiet Desk Lamp",
+          "Focus Flow",
+          "Signal From Europa"
         ]
       }
     },
     {
       "step": 6,
       "name": "critique",
-      "elapsed_ms": 1.21,
+      "elapsed_ms": 1.13,
       "detail": {
         "attempt": 1,
         "passed": true,
@@ -98,7 +98,7 @@
     {
       "step": 7,
       "name": "finalize",
-      "elapsed_ms": 1.23,
+      "elapsed_ms": 1.14,
       "detail": {
         "status": "passed_critique",
         "revisions": 0

@@ -1,7 +1,7 @@
 {
-  "run_id": "538ba59b",
-  "query": "clean hip-hop for lifting",
-  "started_at": 1785729425.794009,
+  "run_id": "6a3adbe1",
+  "query": "gym session, need something loud and hype",
+  "started_at": 1785730359.4331431,
   "steps": [
     {
       "step": 1,
@@ -34,34 +34,37 @@
       "detail": {
         "k": 3,
         "hits": [
-          "workout-high-intensity(7.15)"
+          "workout-high-intensity(11.07)",
+          "personal-late-night-coding(2.74)",
+          "party-social(2.32)"
         ]
       }
     },
     {
       "step": 4,
       "name": "ground",
-      "elapsed_ms": 0.64,
+      "elapsed_ms": 0.12,
       "detail": {
         "prefs": {
-          "genre": "hip-hop",
+          "genre": "edm",
           "mood": "intense",
           "energy": 0.9,
           "likes_acoustic": false,
-          "avoid_explicit": true
+          "avoid_explicit": false,
+          "language": "instrumental"
         },
         "strategy": "energy-focused",
-        "confidence": 0.886,
+        "confidence": 0.733,
         "overrides": [
-          "avoid_explicit",
-          "genre"
+          "energy"
         ],
         "provenance": {
-          "genre": "user request",
+          "genre": "workout-high-intensity",
           "mood": "workout-high-intensity",
-          "energy": "workout-high-intensity",
+          "energy": "user request",
           "likes_acoustic": "workout-high-intensity",
-          "avoid_explicit": "user request",
+          "avoid_explicit": "workout-high-intensity",
+          "language": "personal-late-night-coding",
           "strategy": "workout-high-intensity"
         }
       }
@@ -69,75 +72,36 @@
     {
       "step": 5,
       "name": "recommend",
-      "elapsed_ms": 0.98,
+      "elapsed_ms": 0.42,
       "detail": {
         "attempt": 1,
         "strategy": "energy-focused",
         "pool": 52,
         "picks": [
-          "Block Party Dawn",
+          "Thunder Gym Cycle",
+          "Bass Drop Odyssey",
           "Storm Runner",
-          "Barbell Gospel",
-          "Kilometro Cero"
+          "Barbell Gospel"
         ]
       }
     },
     {
       "step": 6,
       "name": "critique",
-      "elapsed_ms": 1.0,
+      "elapsed_ms": 0.44,
       "detail": {
         "attempt": 1,
-        "passed": false,
-        "violations": [
-          "EXPLICIT_LEAK"
-        ]
-      }
-    },
-    {
-      "step": 7,
-      "name": "revise",
-      "elapsed_ms": 1.02,
-      "detail": {
-        "attempt": 1,
-        "applied": [
-          "EXPLICIT_LEAK -> hard-filtered explicit tracks out of the candidate pool (45 left)"
-        ]
-      }
-    },
-    {
-      "step": 8,
-      "name": "recommend",
-      "elapsed_ms": 1.24,
-      "detail": {
-        "attempt": 2,
-        "strategy": "energy-focused",
-        "pool": 45,
-        "picks": [
-          "Block Party Dawn",
-          "Storm Runner",
-          "Kilometro Cero",
-          "Thunder Gym Cycle"
-        ]
-      }
-    },
-    {
-      "step": 9,
-      "name": "critique",
-      "elapsed_ms": 1.26,
-      "detail": {
-        "attempt": 2,
         "passed": true,
         "violations": []
       }
     },
     {
-      "step": 10,
+      "step": 7,
       "name": "finalize",
-      "elapsed_ms": 1.28,
+      "elapsed_ms": 0.45,
       "detail": {
         "status": "passed_critique",
-        "revisions": 1
+        "revisions": 0
       }
     }
   ]

@@ -1,7 +1,7 @@
 {
-  "run_id": "14f53886",
-  "query": "classical for a workout",
-  "started_at": 1785729607.9420412,
+  "run_id": "5c4a86c1",
+  "query": "something calm for studying, no lyrics",
+  "started_at": 1785730359.431762,
   "steps": [
     {
       "step": 1,
@@ -30,64 +30,67 @@
     {
       "step": 3,
       "name": "retrieve",
-      "elapsed_ms": 0.06,
+      "elapsed_ms": 0.07,
       "detail": {
         "k": 3,
         "hits": [
-          "workout-high-intensity(3.31)",
-          "dinner-background(1.11)",
-          "sad-catharsis(1.05)"
+          "personal-late-night-coding(4.42)",
+          "sleep-winddown(3.50)",
+          "language-and-culture(3.42)"
         ]
       }
     },
     {
       "step": 4,
       "name": "ground",
-      "elapsed_ms": 0.56,
+      "elapsed_ms": 0.77,
       "detail": {
         "prefs": {
-          "genre": "classical",
-          "mood": "intense",
-          "energy": 0.693,
+          "genre": "lofi",
+          "mood": "focused",
+          "energy": 0.25,
           "likes_acoustic": false,
-          "avoid_explicit": false
+          "avoid_explicit": true,
+          "language": "instrumental"
         },
-        "strategy": "energy-focused",
-        "confidence": 0.381,
+        "strategy": "mood-first",
+        "confidence": 0.515,
         "overrides": [
-          "genre"
+          "energy",
+          "language"
         ],
         "provenance": {
-          "genre": "user request",
-          "mood": "workout-high-intensity",
-          "energy": "workout-high-intensity+dinner-background+sad-catharsis",
-          "likes_acoustic": "workout-high-intensity",
-          "avoid_explicit": "workout-high-intensity",
-          "strategy": "workout-high-intensity"
+          "genre": "personal-late-night-coding",
+          "mood": "personal-late-night-coding",
+          "energy": "user request",
+          "likes_acoustic": "personal-late-night-coding",
+          "avoid_explicit": "personal-late-night-coding",
+          "language": "user request",
+          "strategy": "personal-late-night-coding"
         }
       }
     },
     {
       "step": 5,
       "name": "recommend",
-      "elapsed_ms": 0.9,
+      "elapsed_ms": 1.08,
       "detail": {
         "attempt": 1,
-        "strategy": "energy-focused",
+        "strategy": "mood-first",
         "pool": 52,
         "picks": [
-          "Autopista Nocturna",
-          "Amp Feedback Waltz",
-          "City Lights Anthem",
-          "Tokyo Underpass",
-          "Festival Fireflies"
+          "Quiet Desk Lamp",
+          "Focus Flow",
+          "Signal From Europa",
+          "Deadline Sprint",
+          "Glass Ballroom"
         ]
       }
     },
     {
       "step": 6,
       "name": "critique",
-      "elapsed_ms": 0.92,
+      "elapsed_ms": 1.11,
       "detail": {
         "attempt": 1,
         "passed": true,
@@ -97,7 +100,7 @@
     {
       "step": 7,
       "name": "finalize",
-      "elapsed_ms": 0.94,
+      "elapsed_ms": 1.13,
       "detail": {
         "status": "passed_critique",
         "revisions": 0

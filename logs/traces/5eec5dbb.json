@@ -1,7 +1,7 @@
 {
-  "run_id": "b757f823",
-  "query": "help me fall asleep, nothing with singing",
-  "started_at": 1785729289.621537,
+  "run_id": "5eec5dbb",
+  "query": "gym session, need something loud and hype",
+  "started_at": 1785730358.9633222,
   "steps": [
     {
       "step": 1,
@@ -16,7 +16,7 @@
     {
       "step": 2,
       "name": "plan",
-      "elapsed_ms": 0.02,
+      "elapsed_ms": 0.03,
       "detail": {
         "tools": [
           "retrieve",
@@ -30,64 +30,65 @@
     {
       "step": 3,
       "name": "retrieve",
-      "elapsed_ms": 0.05,
+      "elapsed_ms": 0.07,
       "detail": {
         "k": 3,
         "hits": [
-          "sleep-winddown(6.85)",
-          "language-and-culture(3.70)"
+          "workout-high-intensity(11.07)",
+          "personal-late-night-coding(2.74)",
+          "party-social(2.32)"
         ]
       }
     },
     {
       "step": 4,
       "name": "ground",
-      "elapsed_ms": 0.1,
+      "elapsed_ms": 0.71,
       "detail": {
         "prefs": {
-          "genre": "ambient",
-          "mood": "peaceful",
-          "energy": 0.393,
-          "likes_acoustic": true,
-          "avoid_explicit": true,
+          "genre": "edm",
+          "mood": "intense",
+          "energy": 0.9,
+          "likes_acoustic": false,
+          "avoid_explicit": false,
           "language": "instrumental"
         },
         "strategy": "energy-focused",
-        "confidence": 0.689,
+        "confidence": 0.733,
         "overrides": [
-          "language"
+          "energy"
         ],
         "provenance": {
-          "genre": "sleep-winddown",
-          "mood": "sleep-winddown",
-          "energy": "sleep-winddown+language-and-culture",
-          "likes_acoustic": "sleep-winddown",
-          "avoid_explicit": "sleep-winddown",
-          "language": "user request",
-          "strategy": "sleep-winddown"
+          "genre": "workout-high-intensity",
+          "mood": "workout-high-intensity",
+          "energy": "user request",
+          "likes_acoustic": "workout-high-intensity",
+          "avoid_explicit": "workout-high-intensity",
+          "language": "personal-late-night-coding",
+          "strategy": "workout-high-intensity"
         }
       }
     },
     {
       "step": 5,
       "name": "recommend",
-      "elapsed_ms": 0.37,
+      "elapsed_ms": 1.01,
       "detail": {
         "attempt": 1,
         "strategy": "energy-focused",
         "pool": 52,
         "picks": [
-          "Signal From Europa",
-          "Focus Flow",
-          "Blue Note Curfew",
-          "Morning Adagio"
+          "Thunder Gym Cycle",
+          "Bass Drop Odyssey",
+          "Storm Runner",
+          "Barbell Gospel"
         ]
       }
     },
     {
       "step": 6,
       "name": "critique",
-      "elapsed_ms": 0.39,
+      "elapsed_ms": 1.03,
       "detail": {
         "attempt": 1,
         "passed": true,
@@ -97,7 +98,7 @@
     {
       "step": 7,
       "name": "finalize",
-      "elapsed_ms": 0.4,
+      "elapsed_ms": 1.05,
       "detail": {
         "status": "passed_critique",
         "revisions": 0

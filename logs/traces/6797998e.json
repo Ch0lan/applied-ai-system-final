@@ -1,7 +1,7 @@
 {
-  "run_id": "06258430",
-  "query": "lofi for focus",
-  "started_at": 1785729607.735153,
+  "run_id": "6797998e",
+  "query": "help me fall asleep, nothing with singing",
+  "started_at": 1785730359.435967,
   "steps": [
     {
       "step": 1,
@@ -16,7 +16,7 @@
     {
       "step": 2,
       "name": "plan",
-      "elapsed_ms": 0.04,
+      "elapsed_ms": 0.02,
       "detail": {
         "tools": [
           "retrieve",
@@ -30,65 +30,64 @@
     {
       "step": 3,
       "name": "retrieve",
-      "elapsed_ms": 0.07,
+      "elapsed_ms": 0.05,
       "detail": {
         "k": 3,
         "hits": [
-          "study-focus(5.58)"
+          "sleep-winddown(6.85)",
+          "language-and-culture(3.70)"
         ]
       }
     },
     {
       "step": 4,
       "name": "ground",
-      "elapsed_ms": 0.76,
+      "elapsed_ms": 0.11,
       "detail": {
         "prefs": {
-          "genre": "lofi",
-          "mood": "focused",
-          "energy": 0.35,
+          "genre": "ambient",
+          "mood": "peaceful",
+          "energy": 0.393,
           "likes_acoustic": true,
           "avoid_explicit": true,
           "language": "instrumental"
         },
-        "strategy": "mood-first",
-        "confidence": 0.718,
+        "strategy": "energy-focused",
+        "confidence": 0.689,
         "overrides": [
-          "genre"
+          "language"
         ],
         "provenance": {
-          "genre": "user request",
-          "mood": "study-focus",
-          "energy": "study-focus",
-          "likes_acoustic": "study-focus",
-          "avoid_explicit": "study-focus",
-          "language": "study-focus",
-          "strategy": "study-focus"
+          "genre": "sleep-winddown",
+          "mood": "sleep-winddown",
+          "energy": "sleep-winddown+language-and-culture",
+          "likes_acoustic": "sleep-winddown",
+          "avoid_explicit": "sleep-winddown",
+          "language": "user request",
+          "strategy": "sleep-winddown"
         }
       }
     },
     {
       "step": 5,
       "name": "recommend",
-      "elapsed_ms": 1.12,
+      "elapsed_ms": 0.41,
       "detail": {
         "attempt": 1,
-        "strategy": "mood-first",
+        "strategy": "energy-focused",
         "pool": 52,
         "picks": [
-          "Quiet Desk Lamp",
-          "Focus Flow",
           "Signal From Europa",
-          "Deadline Sprint",
-          "Library Rain",
-          "Blue Note Curfew"
+          "Focus Flow",
+          "Blue Note Curfew",
+          "Morning Adagio"
         ]
       }
     },
     {
       "step": 6,
       "name": "critique",
-      "elapsed_ms": 1.15,
+      "elapsed_ms": 0.43,
       "detail": {
         "attempt": 1,
         "passed": true,
@@ -98,7 +97,7 @@
     {
       "step": 7,
       "name": "finalize",
-      "elapsed_ms": 1.17,
+      "elapsed_ms": 0.45,
       "detail": {
         "status": "passed_critique",
         "revisions": 0

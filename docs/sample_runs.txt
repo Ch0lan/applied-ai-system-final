@@ -21,13 +21,13 @@ Stated by you (overrode retrieval): energy, language
 +-----+--------------------+----------------+-----------+----------+------------+---------+
 
 Why these:
-  Quiet Desk Lamp - genre match (+1.0), mood match (+2.5), energy similarity (+0.92), too acoustic for preference (-0.5), language match (+0.5)
-  Focus Flow - genre match (+1.0), mood match (+2.5), energy similarity (+0.85), too acoustic for preference (-0.5), language match (+0.5)
-  Signal From Europa - mood match (+2.5), energy similarity (+0.95), too acoustic for preference (-0.5), language match (+0.5)
-  Deadline Sprint - genre match (+1.0), mood match (+2.5), energy similarity (+0.81), too acoustic for preference (-0.5), language match (+0.5), artist diversity penalty (-1.0)
-  Glass Ballroom - energy similarity (+0.99), too acoustic for preference (-0.5), language match (+0.5)
+  Quiet Desk Lamp - The lofi you asked for, and it lands in a focused mood - a little more acoustic than you usually go.
+  Focus Flow - The lofi you asked for, and it lands in a focused mood - a little more acoustic than you usually go.
+  Signal From Europa - It lands in a focused mood, and sits right in the energy range you wanted - a little more acoustic than you usually go.
+  Deadline Sprint - The lofi you asked for, and it lands in a focused mood - a little more acoustic than you usually go.
+  Glass Ballroom - Sits right in the energy range you wanted, and sung in instrumental - a little more acoustic than you usually go.
 
-Trace b682474e | query: 'something calm for studying, no lyrics'
+Trace 7ab314e0 | query: 'something calm for studying, no lyrics'
   1. validate_input         ok=True, code=, reason=
   2. plan                   tools=['retrieve', 'ground', 'rank', 'critique'], max_revisions=2
   3. retrieve               k=3, hits=['personal-late-night-coding(4.42)', 'sleep-winddown(3.50)', 'language-and-culture(3.42)']
@@ -59,10 +59,10 @@ Stated by you (overrode retrieval): energy
 +-----+-------------------+--------------+---------+----------+------------+---------+
 
 Why these:
-  Thunder Gym Cycle - genre match (+1.0), mood match (+0.5), energy similarity (+2.88)
-  Bass Drop Odyssey - genre match (+1.0), energy similarity (+2.85), language match (+0.5)
-  Storm Runner - mood match (+0.5), energy similarity (+2.97)
-  Barbell Gospel - mood match (+0.5), energy similarity (+2.97)
+  Thunder Gym Cycle - The edm you asked for, and it lands in an intense mood.
+  Bass Drop Odyssey - The edm you asked for, and sits right in the energy range you wanted.
+  Storm Runner - It lands in an intense mood, and sits right in the energy range you wanted.
+  Barbell Gospel - It lands in an intense mood, and sits right in the energy range you wanted.
 
 ----------------------------------------------------------------------
 
@@ -90,12 +90,12 @@ Self-corrections:
 +-----+-------------------+--------------+------------+----------+------------+---------+
 
 Why these:
-  Block Party Dawn - genre match (+1.0), energy similarity (+2.64)
-  Storm Runner - mood match (+0.5), energy similarity (+2.97)
-  Kilometro Cero - mood match (+0.5), energy similarity (+2.94)
-  Thunder Gym Cycle - mood match (+0.5), energy similarity (+2.88)
+  Block Party Dawn - The hip-hop you asked for, and sits right in the energy range you wanted.
+  Storm Runner - It lands in an intense mood, and sits right in the energy range you wanted.
+  Kilometro Cero - It lands in an intense mood, and sits right in the energy range you wanted.
+  Thunder Gym Cycle - It lands in an intense mood, and sits right in the energy range you wanted.
 
-Trace 538ba59b | query: 'clean hip-hop for lifting'
+Trace d1b3ea7d | query: 'clean hip-hop for lifting'
   1. validate_input         ok=True, code=, reason=
   2. plan                   tools=['retrieve', 'ground', 'rank', 'critique'], max_revisions=2
   3. retrieve               k=3, hits=['workout-high-intensity(7.15)']
@@ -133,10 +133,43 @@ Self-corrections:
 +-----+--------------------+--------------+------------+----------+------------+---------+
 
 Why these:
-  Autopista Nocturna - mood match (+1.0), energy similarity (+1.49), language match (+0.5)
-  Ruta del Sol - energy similarity (+1.44), language match (+0.5)
-  Kilometro Cero - energy similarity (+1.23), language match (+0.5)
-  Corazon Electrico - energy similarity (+1.27), language match (+0.5), artist diversity penalty (-1.0)
+  Autopista Nocturna - It lands in a moody mood, and sits right in the energy range you wanted.
+  Ruta del Sol - Sits right in the energy range you wanted, and sung in spanish.
+  Kilometro Cero - Sits right in the energy range you wanted, and sung in spanish.
+  Corazon Electrico - Sits right in the energy range you wanted, and sung in spanish - ranked down so one artist does not take over.
+
+----------------------------------------------------------------------
+
+$ python -m src.cli "korean music for the gym" --k 5
+
+21:12:39 WARNING run aeef5ac4 finished with 1 unresolved violation(s): SHORT_LIST
+Request: korean music for the gym
+Grounded in: language-and-culture (3.99), workout-high-intensity (3.68), personal-late-night-coding (0.86)
+Profile: genre=- mood=happy energy=0.78 language=korean avoid_explicit=False strategy=balanced
+Confidence: 0.43
+Stated by you (overrode retrieval): language
+
+Self-corrections:
+  - LANGUAGE_MISS -> restricted candidate pool to language=korean (4 left)
+  - SHORT_LIST -> relaxed the genre constraint (4 candidates); kept language=korean
+
++-----+-------------------------+---------------+---------+----------+------------+---------+
+|   # | Title                   | Artist        | Genre   |   Energy | Explicit   |   Score |
++=====+=========================+===============+=========+==========+============+=========+
+|   1 | Paper Planes Over Kyoto | Yuna Prism    | k-pop   |     0.78 | no         |    3    |
++-----+-------------------------+---------------+---------+----------+------------+---------+
+|   2 | Seoul Rain Letter       | Han Sol Bloom | k-pop   |     0.46 | no         |    1.52 |
++-----+-------------------------+---------------+---------+----------+------------+---------+
+|   3 | Cherry Blossom Skyline  | Yuna Prism    | k-pop   |     0.8  | no         |    0.97 |
++-----+-------------------------+---------------+---------+----------+------------+---------+
+
+Why these:
+  Paper Planes Over Kyoto - It lands in a happy mood, and sits right in the energy range you wanted.
+  Seoul Rain Letter - Sits right in the energy range you wanted, and sung in korean.
+  Cherry Blossom Skyline - Sits right in the energy range you wanted, and sung in korean - ranked down so one artist does not take over.
+
+WARNING - unresolved after 2 revision(s):
+  [SHORT_LIST] asked for 5 songs, got 3
 
 ----------------------------------------------------------------------
 
@@ -160,16 +193,68 @@ Confidence: 0.77
 +-----+--------------------+----------------+---------+----------+------------+---------+
 
 Why these:
-  Deadline Sprint - genre match (+1.0), mood match (+2.5), energy similarity (+1.00), too acoustic for preference (-0.5), language match (+0.5)
-  Quiet Desk Lamp - genre match (+1.0), mood match (+2.5), energy similarity (+0.89), too acoustic for preference (-0.5), language match (+0.5)
-  Focus Flow - genre match (+1.0), mood match (+2.5), energy similarity (+0.96), too acoustic for preference (-0.5), language match (+0.5), artist diversity penalty (-1.0)
-  Signal From Europa - mood match (+2.5), energy similarity (+0.86), too acoustic for preference (-0.5), language match (+0.5)
+  Deadline Sprint - The lofi you asked for, and it lands in a focused mood - a little more acoustic than you usually go.
+  Quiet Desk Lamp - The lofi you asked for, and it lands in a focused mood - a little more acoustic than you usually go.
+  Focus Flow - The lofi you asked for, and it lands in a focused mood - a little more acoustic than you usually go.
+  Signal From Europa - It lands in a focused mood, and sits right in the energy range you wanted - a little more acoustic than you usually go.
+
+----------------------------------------------------------------------
+
+$ python -m src.cli "sad songs after a breakup" --k 4
+
+Request: sad songs after a breakup
+Grounded in: sad-catharsis (6.60), personal-late-night-coding (2.74)
+Profile: genre=indie rock mood=sad energy=0.41 language=instrumental avoid_explicit=False strategy=mood-first
+Confidence: 0.62
+
++-----+--------------------+---------------+-----------+----------+------------+---------+
+|   # | Title              | Artist        | Genre     |   Energy | Explicit   |   Score |
++=====+====================+===============+===========+==========+============+=========+
+|   1 | Porchlight Goodbye | Sable Creek   | country   |     0.38 | no         |    3.97 |
++-----+--------------------+---------------+-----------+----------+------------+---------+
+|   2 | Noche de Lluvia    | Mar Adentro   | latin pop |     0.42 | no         |    3.49 |
++-----+--------------------+---------------+-----------+----------+------------+---------+
+|   3 | Seoul Rain Letter  | Han Sol Bloom | k-pop     |     0.46 | no         |    3.45 |
++-----+--------------------+---------------+-----------+----------+------------+---------+
+|   4 | Midnight Coding    | LoRoom        | lofi      |     0.42 | no         |    1.99 |
++-----+--------------------+---------------+-----------+----------+------------+---------+
+
+Why these:
+  Porchlight Goodbye - It lands in a sad mood, and sits right in the energy range you wanted.
+  Noche de Lluvia - It lands in a sad mood, and sits right in the energy range you wanted.
+  Seoul Rain Letter - It lands in a sad mood, and sits right in the energy range you wanted.
+  Midnight Coding - Sits right in the energy range you wanted, and acoustic, the way you like it.
+
+----------------------------------------------------------------------
+
+$ python -m src.cli "something calm for studying, no lyrics" --k 3 --plain
+
+Request: something calm for studying, no lyrics
+Grounded in: personal-late-night-coding (4.42), sleep-winddown (3.50), language-and-culture (3.42)
+Profile: genre=lofi mood=focused energy=0.25 language=instrumental avoid_explicit=True strategy=mood-first
+Confidence: 0.52
+Stated by you (overrode retrieval): energy, language
+
++-----+--------------------+----------------+---------+----------+------------+---------+
+|   # | Title              | Artist         | Genre   |   Energy | Explicit   |   Score |
++=====+====================+================+=========+==========+============+=========+
+|   1 | Quiet Desk Lamp    | Paper Lanterns | lofi    |     0.33 | no         |    4.42 |
++-----+--------------------+----------------+---------+----------+------------+---------+
+|   2 | Focus Flow         | LoRoom         | lofi    |     0.4  | no         |    4.35 |
++-----+--------------------+----------------+---------+----------+------------+---------+
+|   3 | Signal From Europa | Orbit Bloom    | ambient |     0.3  | no         |    3.45 |
++-----+--------------------+----------------+---------+----------+------------+---------+
+
+Why these:
+  Quiet Desk Lamp - genre match (+1.0), mood match (+2.5), energy similarity (+0.92), too acoustic for preference (-0.5), language match (+0.5)
+  Focus Flow - genre match (+1.0), mood match (+2.5), energy similarity (+0.85), too acoustic for preference (-0.5), language match (+0.5)
+  Signal From Europa - mood match (+2.5), energy similarity (+0.95), too acoustic for preference (-0.5), language match (+0.5)
 
 ----------------------------------------------------------------------
 
 $ python -m src.cli "" 
 
-20:57:05 WARNING rejected request (EMPTY_INPUT): empty request
+21:12:39 WARNING rejected request (EMPTY_INPUT): empty request
 REFUSED [EMPTY_INPUT]
 Tell me what you want to listen to, e.g. 'something calm for studying'.
 
@@ -177,7 +262,7 @@ Tell me what you want to listen to, e.g. 'something calm for studying'.
 
 $ python -m src.cli "zzzz qqqq wwww vvvv"
 
-20:57:05 WARNING no knowledge document matched 'zzzz qqqq wwww vvvv'
+21:12:39 WARNING no knowledge document matched 'zzzz qqqq wwww vvvv'
 REFUSED [NO_GROUNDING]
 Nothing in the listening-context knowledge base matched that request, so there is no grounded profile to recommend from. Try naming the situation (studying, workout, party, driving, dinner, sleep) or a genre.
 
@@ -185,7 +270,7 @@ Nothing in the listening-context knowledge base matched that request, so there i
 
 $ python -m src.cli "sad songs because i want to kill myself"
 
-20:57:05 WARNING rejected request (OUT_OF_SCOPE): request matches crisis-referral pattern
+21:12:39 WARNING rejected request (OUT_OF_SCOPE): request matches crisis-referral pattern
 REFUSED [OUT_OF_SCOPE]
 This system only picks music and is not a source of mental-health support. If you are in crisis, please contact a local emergency number or, in the US, call or text 988 (Suicide & Crisis Lifeline).
 
@@ -208,35 +293,3 @@ Indexed knowledge sources:
 
 ----------------------------------------------------------------------
 
-$ python -m src.cli "korean music for the gym" --k 5
-
-21:00:26 WARNING run c6f890dc finished with 1 unresolved violation(s): SHORT_LIST
-Request: korean music for the gym
-Grounded in: language-and-culture (3.99), workout-high-intensity (3.68), personal-late-night-coding (0.86)
-Profile: genre=- mood=happy energy=0.78 language=korean avoid_explicit=False strategy=balanced
-Confidence: 0.43
-Stated by you (overrode retrieval): language
-
-Self-corrections:
-  - LANGUAGE_MISS -> restricted candidate pool to language=korean (4 left)
-  - SHORT_LIST -> relaxed the genre constraint (4 candidates); kept language=korean
-
-+-----+-------------------------+---------------+---------+----------+------------+---------+
-|   # | Title                   | Artist        | Genre   |   Energy | Explicit   |   Score |
-+=====+=========================+===============+=========+==========+============+=========+
-|   1 | Paper Planes Over Kyoto | Yuna Prism    | k-pop   |     0.78 | no         |    3    |
-+-----+-------------------------+---------------+---------+----------+------------+---------+
-|   2 | Seoul Rain Letter       | Han Sol Bloom | k-pop   |     0.46 | no         |    1.52 |
-+-----+-------------------------+---------------+---------+----------+------------+---------+
-|   3 | Cherry Blossom Skyline  | Yuna Prism    | k-pop   |     0.8  | no         |    0.97 |
-+-----+-------------------------+---------------+---------+----------+------------+---------+
-
-Why these:
-  Paper Planes Over Kyoto - mood match (+1.0), energy similarity (+1.50), language match (+0.5)
-  Seoul Rain Letter - energy similarity (+1.02), language match (+0.5)
-  Cherry Blossom Skyline - energy similarity (+1.47), language match (+0.5), artist diversity penalty (-1.0)
-
-WARNING - unresolved after 2 revision(s):
-  [SHORT_LIST] asked for 5 songs, got 3
-
-----------------------------------------------------------------------

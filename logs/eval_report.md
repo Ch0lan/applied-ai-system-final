@@ -26,6 +26,25 @@
 | cooking dinner for guests, keep it in the b... | 0% | 80% | +80 pts |
 | help me fall asleep, nothing with singing | 0% | 60% | +60 pts |
 
+## Explanation style: baseline scorer output vs specialized rendering
+
+| Metric | Baseline (raw scorer) | Specialized (exemplar-constrained) |
+|---|---|---|
+| explanations compared | 20 | 20 |
+| mean characters | 83 | 82 |
+| contain score arithmetic | 100% | 0% |
+| address the listener directly | 0% | 100% |
+
+- `something calm for studying, no lyrics` -> **Quiet Desk Lamp**
+  - baseline: `genre match (+1.0), mood match (+2.5), energy similarity (+0.92), too acoustic for preference (-0.5), language match (+0.5)`
+  - specialized: The lofi you asked for, and it lands in a focused mood - a little more acoustic than you usually go.
+- `gym session, need something loud and hype` -> **Thunder Gym Cycle**
+  - baseline: `genre match (+1.0), mood match (+0.5), energy similarity (+2.88)`
+  - specialized: The edm you asked for, and it lands in an intense mood.
+- `cooking dinner for guests, keep it in the background` -> **Coffee Shop Stories**
+  - baseline: `genre match (+1.0), mood match (+2.5), energy similarity (+0.99), acoustic match (+0.5)`
+  - specialized: The jazz you asked for, and it lands in a relaxed mood.
+
 ## Per-case detail
 
 ### study-instrumental

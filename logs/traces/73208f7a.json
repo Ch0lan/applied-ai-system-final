@@ -1,7 +1,7 @@
 {
-  "run_id": "96327fa4",
-  "query": "lofi for focus",
-  "started_at": 1785729582.813885,
+  "run_id": "73208f7a",
+  "query": "late night coding on my side project",
+  "started_at": 1785730359.133661,
   "steps": [
     {
       "step": 1,
@@ -16,7 +16,7 @@
     {
       "step": 2,
       "name": "plan",
-      "elapsed_ms": 0.03,
+      "elapsed_ms": 0.04,
       "detail": {
         "tools": [
           "retrieve",
@@ -30,65 +30,63 @@
     {
       "step": 3,
       "name": "retrieve",
-      "elapsed_ms": 0.06,
+      "elapsed_ms": 0.07,
       "detail": {
         "k": 3,
         "hits": [
-          "study-focus(5.58)"
+          "personal-late-night-coding(19.88)",
+          "study-focus(2.21)",
+          "commute-driving(2.13)"
         ]
       }
     },
     {
       "step": 4,
       "name": "ground",
-      "elapsed_ms": 0.69,
+      "elapsed_ms": 0.77,
       "detail": {
         "prefs": {
           "genre": "lofi",
           "mood": "focused",
-          "energy": 0.35,
-          "likes_acoustic": true,
+          "energy": 0.438,
+          "likes_acoustic": false,
           "avoid_explicit": true,
           "language": "instrumental"
         },
         "strategy": "mood-first",
-        "confidence": 0.718,
-        "overrides": [
-          "genre"
-        ],
+        "confidence": 0.767,
+        "overrides": [],
         "provenance": {
-          "genre": "user request",
-          "mood": "study-focus",
-          "energy": "study-focus",
-          "likes_acoustic": "study-focus",
-          "avoid_explicit": "study-focus",
-          "language": "study-focus",
-          "strategy": "study-focus"
+          "genre": "personal-late-night-coding",
+          "mood": "personal-late-night-coding",
+          "energy": "personal-late-night-coding+study-focus+commute-driving",
+          "likes_acoustic": "personal-late-night-coding",
+          "avoid_explicit": "personal-late-night-coding",
+          "language": "personal-late-night-coding",
+          "strategy": "personal-late-night-coding"
         }
       }
     },
     {
       "step": 5,
       "name": "recommend",
-      "elapsed_ms": 1.03,
+      "elapsed_ms": 1.09,
       "detail": {
         "attempt": 1,
         "strategy": "mood-first",
         "pool": 52,
         "picks": [
+          "Deadline Sprint",
           "Quiet Desk Lamp",
           "Focus Flow",
-          "Signal From Europa",
-          "Deadline Sprint",
-          "Library Rain",
-          "Blue Note Curfew"
+          "Signal From Europa"
         ]
       }
     },
     {
       "step": 6,
       "name": "critique",
-      "elapsed_ms": 1.06,
+      "elapsed_ms": 1.11,
       "detail": {
         "attempt": 1,
         "passed": true,
@@ -98,7 +96,7 @@
     {
       "step": 7,
       "name": "finalize",
-      "elapsed_ms": 1.07,
+      "elapsed_ms": 1.13,
       "detail": {
         "status": "passed_critique",
         "revisions": 0

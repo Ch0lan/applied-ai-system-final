@@ -1,7 +1,7 @@
 {
-  "run_id": "2b09ddcc",
-  "query": "metal but calm and quiet",
-  "started_at": 1785729607.9011688,
+  "run_id": "3c577664",
+  "query": "sad songs after a breakup",
+  "started_at": 1785730359.1760151,
   "steps": [
     {
       "step": 1,
@@ -34,37 +34,35 @@
       "detail": {
         "k": 3,
         "hits": [
-          "sleep-winddown(6.20)"
+          "sad-catharsis(6.60)",
+          "personal-late-night-coding(2.74)"
         ]
       }
     },
     {
       "step": 4,
       "name": "ground",
-      "elapsed_ms": 0.69,
+      "elapsed_ms": 0.73,
       "detail": {
         "prefs": {
-          "genre": "metal",
-          "mood": "peaceful",
-          "energy": 0.25,
+          "genre": "indie rock",
+          "mood": "sad",
+          "energy": 0.406,
           "likes_acoustic": true,
-          "avoid_explicit": true,
+          "avoid_explicit": false,
           "language": "instrumental"
         },
-        "strategy": "energy-focused",
-        "confidence": 0.815,
-        "overrides": [
-          "energy",
-          "genre"
-        ],
+        "strategy": "mood-first",
+        "confidence": 0.62,
+        "overrides": [],
         "provenance": {
-          "genre": "user request",
-          "mood": "sleep-winddown",
-          "energy": "user request",
-          "likes_acoustic": "sleep-winddown",
-          "avoid_explicit": "sleep-winddown",
-          "language": "sleep-winddown",
-          "strategy": "sleep-winddown"
+          "genre": "sad-catharsis",
+          "mood": "sad-catharsis",
+          "energy": "sad-catharsis+personal-late-night-coding",
+          "likes_acoustic": "sad-catharsis",
+          "avoid_explicit": "sad-catharsis",
+          "language": "personal-late-night-coding",
+          "strategy": "sad-catharsis"
         }
       }
     },
@@ -74,21 +72,20 @@
       "elapsed_ms": 1.04,
       "detail": {
         "attempt": 1,
-        "strategy": "energy-focused",
+        "strategy": "mood-first",
         "pool": 52,
         "picks": [
-          "Morning Adagio",
-          "Moonlit Sonata Dreams",
-          "Deep Field Drift",
-          "Quiet Desk Lamp",
-          "Focus Flow"
+          "Porchlight Goodbye",
+          "Noche de Lluvia",
+          "Seoul Rain Letter",
+          "Midnight Coding"
         ]
       }
     },
     {
       "step": 6,
       "name": "critique",
-      "elapsed_ms": 1.07,
+      "elapsed_ms": 1.06,
       "detail": {
         "attempt": 1,
         "passed": true,
@@ -98,7 +95,7 @@
     {
       "step": 7,
       "name": "finalize",
-      "elapsed_ms": 1.09,
+      "elapsed_ms": 1.08,
       "detail": {
         "status": "passed_critique",
         "revisions": 0

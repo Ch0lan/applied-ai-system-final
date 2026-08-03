@@ -198,7 +198,7 @@ around it:
 how retrieval, grounding, and self-checking fit together. It is not a product, the catalog is
 hand-written, and no listener has evaluated the taste of its output.
 
-## 11. Limitations and Bias
+## 11. What are the limitations or biases in your system?
 
 **Corpus coverage is the ceiling on everything.** Nine documents define every situation the
 system understands. A request outside them either refuses (`NO_GROUNDING`) or, worse, retrieves
@@ -222,6 +222,13 @@ genre, a language, or a culture. English tracks outnumber every other language; 
 and Japanese have 4-6 tracks each, which is why "korean music for the gym" cannot fill a
 5-song request. Non-English requests will look worse to users than English ones for a reason
 that has nothing to do with the algorithm.
+
+**A stated genre is not enforced the way a stated language is.** Asking for "classical for a
+workout" returns zero classical tracks: the workout document's energy target wins, and genre
+stays a soft +1.0 scoring term. Language became a hard filter because a language mismatch makes
+a recommendation useless; genre did not, and the result is an inconsistency a user can feel —
+their words were honored in one dimension and quietly outvoted in another. The only signal they
+get is a low confidence score (0.38 for that request).
 
 **Confidence is not calibrated.** It is a weighted heuristic over retrieval strength, document
 agreement, and how much the user stated. It usefully orders "well-grounded" against "shaky", and
@@ -259,7 +266,7 @@ The multi-source part matters too: `data/knowledge_user/personal-notes.md` carri
 above the general study document and produces energy 0.42 rather than 0.35 — the note's whole
 point ("steady momentum" rather than "minimum stimulus") reaching the output.
 
-## 13. Misuse, and How It Is Constrained
+## 13. Could your AI be misused, and how would you prevent that?
 
 **Emotional targeting.** A system that reads a mood from a sentence and picks music to match it
 is one small step from a system that picks music to *keep* someone in that mood. The
@@ -286,23 +293,29 @@ per-song arithmetic, which makes the system feel more authoritative than nine ma
 deserve. The mitigations are the visible confidence score, the printed unresolved warnings, and
 the refusal paths — the system is built to look uncertain when it is.
 
-## 14. AI Collaboration, and What Surprised Me in Testing
+## 14. How I collaborated with AI, and what surprised me while testing reliability
 
-**How I used AI.** I worked with Claude throughout: designing the layer boundaries (retriever /
+### How I used AI during development
+
+I worked with Claude throughout: designing the layer boundaries (retriever /
 grounding / guardrails / agent, so each is testable alone), drafting the BM25 implementation and
 the knowledge corpus, writing test cases, and reviewing traces when the output looked wrong.
 The debugging loop was the most valuable part — I would paste a trace showing the wrong document
 winning retrieval, and we would work backwards to whether the cause was the corpus, the weights,
 or the merge rule.
 
-**One helpful suggestion.** When I described the guardrails as input-validation only, the
+### One helpful AI suggestion
+
+When I described the guardrails as input-validation only, the
 suggestion was to make the critic run on the *finished recommendation list* and emit a fix code
 per violation, so the agent could map codes to concrete revision actions. That is what turned
 this from a pipeline into an agent: `EXPLICIT_LEAK → hard_filter_explicit` is the reason
 "clean hip-hop for lifting" returns zero explicit tracks even though the Module 3 scorer alone
 lets two through. Nothing in the original design would have caught that.
 
-**One flawed suggestion.** The first cue-merge implementation took every front-matter field from
+### One flawed AI suggestion
+
+The first cue-merge implementation took every front-matter field from
 retrieved documents and treated them all as hard constraints of equal standing. It looked
 principled and produced a bug I did not see until I read a trace: for "gym session, loud and
 hype", my personal coding note outranked the workout document, so `language: instrumental` — a
@@ -314,7 +327,9 @@ cues stay soft scoring signals. A related version of the same mistake hit `relax
 which "helpfully" restored the full catalog after a short list and discarded the Spanish filter
 a Spanish speaker had explicitly asked for.
 
-**What surprised me.** Three things.
+### What surprised me while testing reliability
+
+Three things.
 
 First, **the self-correcting agent was easier to get working than the retriever was to get
 right.** The loop worked on the first run; the corpus took four rounds of tuning. Nearly every
@@ -332,7 +347,7 @@ the system run. The suite is a strong regression guard and weak evidence of qual
 bugs above were found by reading traces and by tests that failed for reasons I did not
 anticipate — not by the green summary line.
 
-## 15. Future Work
+## 15. Future improvements
 
 - Swap or supplement BM25 with sentence embeddings so paraphrases stop falling into
   `NO_GROUNDING`, and measure the change with the existing `--compare` harness.
@@ -341,3 +356,37 @@ anticipate — not by the green summary line.
 - Calibrate confidence against human judgments rather than internal retrieval signals.
 - Have real listeners rate the top-5 for a set of requests — the one thing no amount of
   self-critique can substitute for.
+
+## 16. Specialization: baseline vs specialized output
+
+The system has no generative model, so this is not a fine-tune. It is the brief's other
+specialization option — **constrained tone and style driven by few-shot patterns** — implemented
+as a data-file style contract in `data/style/explanation_style.md`: a phrase table, six explicit
+style constraints, and four worked `raw → styled` exemplars that `src/explainer.py` follows
+deterministically. Editing that markdown file changes every explanation the system emits without
+touching code. `--plain` returns the baseline; `python -m src.evaluate --style` measures both.
+
+Measured over the 20 explanations produced for the four comparison requests:
+
+| Metric | Baseline (raw scorer, Module 3) | Specialized (exemplar-constrained) |
+|---|---|---|
+| explanations compared | 20 | 20 |
+| mean characters | 83 | 82 |
+| contain score arithmetic | 100% | 0% |
+| address the listener directly | 0% | 100% |
+
+Same songs, same underlying arithmetic, essentially the same length — the difference is entirely
+in the voice:
+
+| Request → song | Baseline | Specialized |
+|---|---|---|
+| studying → *Quiet Desk Lamp* | `genre match (+1.0), mood match (+2.5), energy similarity (+0.92), too acoustic for preference (-0.5), language match (+0.5)` | The lofi you asked for, and it lands in a focused mood - a little more acoustic than you usually go. |
+| gym → *Thunder Gym Cycle* | `genre match (+1.0), mood match (+0.5), energy similarity (+2.88)` | The edm you asked for, and it lands in an intense mood. |
+| dinner → *Coffee Shop Stories* | `genre match (+1.0), mood match (+2.5), energy similarity (+0.99), acoustic match (+0.5)` | The jazz you asked for, and it lands in a relaxed mood. |
+
+The constraint that mattered most was "never claim a match the score did not actually contain".
+The styled sentence is assembled *from the score components*, so it cannot describe a genre match
+that did not happen — the failure mode of writing explanations separately from the ranking, where
+the prose drifts away from what the system actually did. The visible cost is compression: the
+style caps at two supporting clauses plus one qualifier, so the studying example silently drops
+`language match`. That is a real loss of information, which is why `--plain` exists.

@@ -1,12 +1,12 @@
 {
-  "run_id": "e9c9562c",
-  "query": "metal but calm and quiet",
-  "started_at": 1785729615.107994,
+  "run_id": "25be53ed",
+  "query": "late night coding on my side project",
+  "started_at": 1785730359.436598,
   "steps": [
     {
       "step": 1,
       "name": "validate_input",
-      "elapsed_ms": 0.01,
+      "elapsed_ms": 0.0,
       "detail": {
         "ok": true,
         "code": "",
@@ -16,7 +16,7 @@
     {
       "step": 2,
       "name": "plan",
-      "elapsed_ms": 0.03,
+      "elapsed_ms": 0.02,
       "detail": {
         "tools": [
           "retrieve",
@@ -30,65 +30,63 @@
     {
       "step": 3,
       "name": "retrieve",
-      "elapsed_ms": 0.06,
+      "elapsed_ms": 0.05,
       "detail": {
         "k": 3,
         "hits": [
-          "sleep-winddown(6.20)"
+          "personal-late-night-coding(19.88)",
+          "study-focus(2.21)",
+          "commute-driving(2.13)"
         ]
       }
     },
     {
       "step": 4,
       "name": "ground",
-      "elapsed_ms": 0.69,
+      "elapsed_ms": 0.11,
       "detail": {
         "prefs": {
-          "genre": "metal",
-          "mood": "peaceful",
-          "energy": 0.25,
-          "likes_acoustic": true,
+          "genre": "lofi",
+          "mood": "focused",
+          "energy": 0.438,
+          "likes_acoustic": false,
           "avoid_explicit": true,
           "language": "instrumental"
         },
-        "strategy": "energy-focused",
-        "confidence": 0.815,
-        "overrides": [
-          "energy",
-          "genre"
-        ],
+        "strategy": "mood-first",
+        "confidence": 0.767,
+        "overrides": [],
         "provenance": {
-          "genre": "user request",
-          "mood": "sleep-winddown",
-          "energy": "user request",
-          "likes_acoustic": "sleep-winddown",
-          "avoid_explicit": "sleep-winddown",
-          "language": "sleep-winddown",
-          "strategy": "sleep-winddown"
+          "genre": "personal-late-night-coding",
+          "mood": "personal-late-night-coding",
+          "energy": "personal-late-night-coding+study-focus+commute-driving",
+          "likes_acoustic": "personal-late-night-coding",
+          "avoid_explicit": "personal-late-night-coding",
+          "language": "personal-late-night-coding",
+          "strategy": "personal-late-night-coding"
         }
       }
     },
     {
       "step": 5,
       "name": "recommend",
-      "elapsed_ms": 1.03,
+      "elapsed_ms": 0.41,
       "detail": {
         "attempt": 1,
-        "strategy": "energy-focused",
+        "strategy": "mood-first",
         "pool": 52,
         "picks": [
-          "Morning Adagio",
-          "Moonlit Sonata Dreams",
-          "Deep Field Drift",
+          "Deadline Sprint",
           "Quiet Desk Lamp",
-          "Focus Flow"
+          "Focus Flow",
+          "Signal From Europa"
         ]
       }
     },
     {
       "step": 6,
       "name": "critique",
-      "elapsed_ms": 1.05,
+      "elapsed_ms": 0.43,
       "detail": {
         "attempt": 1,
         "passed": true,
@@ -98,7 +96,7 @@
     {
       "step": 7,
       "name": "finalize",
-      "elapsed_ms": 1.07,
+      "elapsed_ms": 0.44,
       "detail": {
         "status": "passed_critique",
         "revisions": 0

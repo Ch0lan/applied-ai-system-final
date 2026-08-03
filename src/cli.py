@@ -10,11 +10,12 @@ Command-line entry point for Resonance.
 import argparse
 import json
 import sys
-from typing import List
+from typing import List, Optional
 
 from tabulate import tabulate
 
 from src.agent import DEFAULT_CATALOG, DEFAULT_SOURCES, AgentResult, RecommenderAgent
+from src.explainer import Explainer, StyleError
 from src.trace import get_logger
 
 
@@ -30,6 +31,8 @@ def build_parser() -> argparse.ArgumentParser:
                         help="knowledge directory (repeatable; defaults to both built-in sources)")
     parser.add_argument("--json", action="store_true", help="print the full result as JSON")
     parser.add_argument("--trace", action="store_true", help="print the agent's reasoning trace")
+    parser.add_argument("--plain", action="store_true",
+                        help="show the raw scorer output instead of the styled explanations")
     parser.add_argument("--no-save-trace", action="store_true", help="do not write logs/traces/<id>.json")
     parser.add_argument("--show-sources", action="store_true",
                         help="list the indexed knowledge sources and exit")
@@ -37,7 +40,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _render(result: AgentResult, show_trace: bool) -> str:
+def _render(result: AgentResult, show_trace: bool, explainer: Optional[Explainer] = None) -> str:
     lines: List[str] = []
 
     if not result.ok and not result.recommendations:
@@ -85,7 +88,8 @@ def _render(result: AgentResult, show_trace: bool) -> str:
     lines.append("")
     lines.append("Why these:")
     for song, _, why in result.recommendations:
-        lines.append("  %s - %s" % (song["title"], why))
+        text = explainer.render(song, why) if explainer else why
+        lines.append("  %s - %s" % (song["title"], text))
 
     if result.violations:
         lines.append("")
@@ -128,6 +132,13 @@ def main(argv=None) -> int:
               file=sys.stderr)
         return 2
 
+    explainer = None
+    if not args.plain:
+        try:
+            explainer = Explainer()
+        except StyleError as exc:  # missing style file must not break recommendations
+            logger.warning("styled explanations disabled: %s", exc)
+
     result = agent.run(args.query, k=args.k)
 
     if not args.no_save_trace and result.trace:
@@ -136,7 +147,7 @@ def main(argv=None) -> int:
     if args.json:
         print(json.dumps(result.as_dict(), indent=2, default=str))
     else:
-        print(_render(result, show_trace=args.trace))
+        print(_render(result, show_trace=args.trace, explainer=explainer))
 
     return 0 if result.ok else 1
 

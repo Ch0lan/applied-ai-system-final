@@ -1,0 +1,48 @@
+Running 10 evaluation cases against 52 songs and 9 knowledge documents.
+
+| Case                               | Criteria   | Result   |   Confidence |   Revisions | Refusal      |
+|------------------------------------|------------|----------|--------------|-------------|--------------|
+| study-instrumental                 | 5/5        | PASS     |         0.52 |           0 | -            |
+| gym-high-energy                    | 4/4        | PASS     |         0.73 |           0 | -            |
+| clean-hiphop-guardrail             | 3/3        | PASS     |         0.89 |           1 | -            |
+| language-hard-constraint           | 3/3        | PASS     |         0.67 |           1 | -            |
+| dinner-background                  | 4/4        | PASS     |         0.72 |           0 | -            |
+| sleep-winddown                     | 3/3        | PASS     |         0.69 |           0 | -            |
+| personal-note-beats-general-corpus | 3/3        | PASS     |         0.77 |           0 | -            |
+| guardrail-empty-input              | 1/1        | PASS     |         0    |           0 | EMPTY_INPUT  |
+| guardrail-gibberish                | 1/1        | PASS     |         0    |           0 | NO_GROUNDING |
+| guardrail-out-of-scope             | 1/1        | PASS     |         0    |           0 | OUT_OF_SCOPE |
+
+Retrieval impact - share of returned tracks that fit the situation:
+
+| Request                                        | Ungrounded baseline   | Retrieval-grounded   | Delta   |
+|------------------------------------------------|-----------------------|----------------------|---------|
+| something calm for studying, no lyrics         | 0%                    | 80%                  | +80 pts |
+| gym session, need something loud and hype      | 60%                   | 100%                 | +40 pts |
+| cooking dinner for guests, keep it in the b... | 0%                    | 80%                  | +80 pts |
+| help me fall asleep, nothing with singing      | 0%                    | 60%                  | +60 pts |
+
+Explanation style - baseline scorer output vs specialized rendering:
+
+| Metric                        | Baseline (raw scorer)   | Specialized   |
+|-------------------------------|-------------------------|---------------|
+| explanations compared         | 20                      | 20            |
+| mean characters               | 83                      | 82            |
+| contain score arithmetic      | 100%                    | 0%            |
+| address the listener directly | 0%                      | 100%          |
+
+  something calm for studying, no lyrics -> Quiet Desk Lamp
+    baseline:    genre match (+1.0), mood match (+2.5), energy similarity (+0.92), too acoustic for preference (-0.5), language match (+0.5)
+    specialized: The lofi you asked for, and it lands in a focused mood - a little more acoustic than you usually go.
+
+  gym session, need something loud and hype -> Thunder Gym Cycle
+    baseline:    genre match (+1.0), mood match (+0.5), energy similarity (+2.88)
+    specialized: The edm you asked for, and it lands in an intense mood.
+
+  cooking dinner for guests, keep it in the background -> Coffee Shop Stories
+    baseline:    genre match (+1.0), mood match (+2.5), energy similarity (+0.99), acoustic match (+0.5)
+    specialized: The jazz you asked for, and it lands in a relaxed mood.
+
+
+10/10 cases passed | mean confidence 0.71 | traces in logs/traces/
+report written to logs/eval_report.md
