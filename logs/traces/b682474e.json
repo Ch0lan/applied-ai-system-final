@@ -1,0 +1,110 @@
+{
+  "run_id": "b682474e",
+  "query": "something calm for studying, no lyrics",
+  "started_at": 1785729425.700431,
+  "steps": [
+    {
+      "step": 1,
+      "name": "validate_input",
+      "elapsed_ms": 0.01,
+      "detail": {
+        "ok": true,
+        "code": "",
+        "reason": ""
+      }
+    },
+    {
+      "step": 2,
+      "name": "plan",
+      "elapsed_ms": 0.04,
+      "detail": {
+        "tools": [
+          "retrieve",
+          "ground",
+          "rank",
+          "critique"
+        ],
+        "max_revisions": 2
+      }
+    },
+    {
+      "step": 3,
+      "name": "retrieve",
+      "elapsed_ms": 0.09,
+      "detail": {
+        "k": 3,
+        "hits": [
+          "personal-late-night-coding(4.42)",
+          "sleep-winddown(3.50)",
+          "language-and-culture(3.42)"
+        ]
+      }
+    },
+    {
+      "step": 4,
+      "name": "ground",
+      "elapsed_ms": 0.84,
+      "detail": {
+        "prefs": {
+          "genre": "lofi",
+          "mood": "focused",
+          "energy": 0.25,
+          "likes_acoustic": false,
+          "avoid_explicit": true,
+          "language": "instrumental"
+        },
+        "strategy": "mood-first",
+        "confidence": 0.515,
+        "overrides": [
+          "energy",
+          "language"
+        ],
+        "provenance": {
+          "genre": "personal-late-night-coding",
+          "mood": "personal-late-night-coding",
+          "energy": "user request",
+          "likes_acoustic": "personal-late-night-coding",
+          "avoid_explicit": "personal-late-night-coding",
+          "language": "user request",
+          "strategy": "personal-late-night-coding"
+        }
+      }
+    },
+    {
+      "step": 5,
+      "name": "recommend",
+      "elapsed_ms": 1.34,
+      "detail": {
+        "attempt": 1,
+        "strategy": "mood-first",
+        "pool": 52,
+        "picks": [
+          "Quiet Desk Lamp",
+          "Focus Flow",
+          "Signal From Europa",
+          "Deadline Sprint",
+          "Glass Ballroom"
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "name": "critique",
+      "elapsed_ms": 1.38,
+      "detail": {
+        "attempt": 1,
+        "passed": true,
+        "violations": []
+      }
+    },
+    {
+      "step": 7,
+      "name": "finalize",
+      "elapsed_ms": 1.39,
+      "detail": {
+        "status": "passed_critique",
+        "revisions": 0
+      }
+    }
+  ]
+}

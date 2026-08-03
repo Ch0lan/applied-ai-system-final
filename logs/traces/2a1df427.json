@@ -1,0 +1,106 @@
+{
+  "run_id": "2a1df427",
+  "query": "late night coding on my side project",
+  "started_at": 1785729289.622114,
+  "steps": [
+    {
+      "step": 1,
+      "name": "validate_input",
+      "elapsed_ms": 0.01,
+      "detail": {
+        "ok": true,
+        "code": "",
+        "reason": ""
+      }
+    },
+    {
+      "step": 2,
+      "name": "plan",
+      "elapsed_ms": 0.02,
+      "detail": {
+        "tools": [
+          "retrieve",
+          "ground",
+          "rank",
+          "critique"
+        ],
+        "max_revisions": 2
+      }
+    },
+    {
+      "step": 3,
+      "name": "retrieve",
+      "elapsed_ms": 0.05,
+      "detail": {
+        "k": 3,
+        "hits": [
+          "personal-late-night-coding(19.88)",
+          "study-focus(2.21)",
+          "commute-driving(2.13)"
+        ]
+      }
+    },
+    {
+      "step": 4,
+      "name": "ground",
+      "elapsed_ms": 0.1,
+      "detail": {
+        "prefs": {
+          "genre": "lofi",
+          "mood": "focused",
+          "energy": 0.438,
+          "likes_acoustic": false,
+          "avoid_explicit": true,
+          "language": "instrumental"
+        },
+        "strategy": "mood-first",
+        "confidence": 0.767,
+        "overrides": [],
+        "provenance": {
+          "genre": "personal-late-night-coding",
+          "mood": "personal-late-night-coding",
+          "energy": "personal-late-night-coding+study-focus+commute-driving",
+          "likes_acoustic": "personal-late-night-coding",
+          "avoid_explicit": "personal-late-night-coding",
+          "language": "personal-late-night-coding",
+          "strategy": "personal-late-night-coding"
+        }
+      }
+    },
+    {
+      "step": 5,
+      "name": "recommend",
+      "elapsed_ms": 0.37,
+      "detail": {
+        "attempt": 1,
+        "strategy": "mood-first",
+        "pool": 52,
+        "picks": [
+          "Deadline Sprint",
+          "Quiet Desk Lamp",
+          "Focus Flow",
+          "Signal From Europa"
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "name": "critique",
+      "elapsed_ms": 0.39,
+      "detail": {
+        "attempt": 1,
+        "passed": true,
+        "violations": []
+      }
+    },
+    {
+      "step": 7,
+      "name": "finalize",
+      "elapsed_ms": 0.4,
+      "detail": {
+        "status": "passed_critique",
+        "revisions": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+%% Resonance - system architecture
+%% Source of truth for the diagram. Render at https://mermaid.live or with mermaid-cli.
+%% Node labels name the actual module that implements each step.
+
+flowchart TD
+    U["User request in free text<br/>python -m src.cli your request here"]
+
+    subgraph GR["Input guardrails - src/guardrails.py"]
+        V{"validate_query<br/>empty / too short / too long /<br/>not language / crisis pattern"}
+        REF["Refusal + reason code<br/>EMPTY_INPUT, TOO_LONG,<br/>NOT_LANGUAGE, OUT_OF_SCOPE"]
+    end
+
+    subgraph AG["Agent loop - src/agent.py"]
+        P["plan<br/>choose tools, set revision budget"]
+        R["retrieve (tool)<br/>src/retriever.py - BM25"]
+        G["ground (tool)<br/>src/profile_builder.py<br/>merge cues, score confidence"]
+        NOG["Refusal NO_GROUNDING<br/>nothing matched the corpus"]
+        RANK["recommend (tool)<br/>src/recommender.py<br/>score, rank, artist-diversity cap"]
+        C{"critique (tool)<br/>src/guardrails.py<br/>critique_recommendations"}
+        REV["revise<br/>hard_filter_explicit / hard_filter_language /<br/>enforce_diversity / switch_to_energy_strategy /<br/>broaden_retrieval / relax_constraints"]
+    end
+
+    subgraph KB["Knowledge sources (multi-source retrieval)"]
+        K1[("data/knowledge/<br/>8 listening-context docs")]
+        K2[("data/knowledge_user/<br/>personal notes, source_weight > 1")]
+    end
+
+    CAT[("data/songs.csv<br/>52-song catalog")]
+
+    subgraph OBS["Observability - src/trace.py"]
+        TR[("logs/traces/RUN_ID.json<br/>step-by-step reasoning trace")]
+        LG[("logs/run.log")]
+    end
+
+    subgraph HUM["Human + automated checking"]
+        EV["src/evaluate.py<br/>10 declared cases, pass/fail + confidence"]
+        RPT[("logs/eval_report.md")]
+        T["tests/ - 47 pytest unit + integration tests"]
+        H["Human review of<br/>traces and eval report"]
+    end
+
+    OUT["Ranked songs + per-song reasons<br/>+ confidence + evidence doc ids<br/>+ any unresolved warnings"]
+
+    U --> V
+    V -- "invalid" --> REF
+    V -- "valid" --> P
+    P --> R
+    K1 --> R
+    K2 --> R
+    R -- "no hits" --> NOG
+    R -- "top-k docs + scores" --> G
+    G -- "prefs, strategy, confidence" --> RANK
+    CAT --> RANK
+    RANK -- "candidate list" --> C
+    C -- "violations found<br/>(budget left)" --> REV
+    REV -- "tightened / broadened constraints" --> RANK
+    C -- "passed, or budget spent" --> OUT
+
+    P -.-> TR
+    R -.-> TR
+    G -.-> TR
+    RANK -.-> TR
+    C -.-> TR
+    REV -.-> TR
+    V -.-> LG
+
+    OUT --> EV
+    EV --> RPT
+    RPT --> H
+    TR --> H
+    T --> H
+    H -. "corpus + guardrail tuning" .-> K1
+    H -. "threshold tuning" .-> GR

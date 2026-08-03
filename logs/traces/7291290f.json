@@ -1,0 +1,108 @@
+{
+  "run_id": "7291290f",
+  "query": "gym session, need something loud and hype",
+  "started_at": 1785729289.618525,
+  "steps": [
+    {
+      "step": 1,
+      "name": "validate_input",
+      "elapsed_ms": 0.01,
+      "detail": {
+        "ok": true,
+        "code": "",
+        "reason": ""
+      }
+    },
+    {
+      "step": 2,
+      "name": "plan",
+      "elapsed_ms": 0.02,
+      "detail": {
+        "tools": [
+          "retrieve",
+          "ground",
+          "rank",
+          "critique"
+        ],
+        "max_revisions": 2
+      }
+    },
+    {
+      "step": 3,
+      "name": "retrieve",
+      "elapsed_ms": 0.05,
+      "detail": {
+        "k": 3,
+        "hits": [
+          "workout-high-intensity(11.07)",
+          "personal-late-night-coding(2.74)",
+          "party-social(2.32)"
+        ]
+      }
+    },
+    {
+      "step": 4,
+      "name": "ground",
+      "elapsed_ms": 0.11,
+      "detail": {
+        "prefs": {
+          "genre": "edm",
+          "mood": "intense",
+          "energy": 0.9,
+          "likes_acoustic": false,
+          "avoid_explicit": false,
+          "language": "instrumental"
+        },
+        "strategy": "energy-focused",
+        "confidence": 0.733,
+        "overrides": [
+          "energy"
+        ],
+        "provenance": {
+          "genre": "workout-high-intensity",
+          "mood": "workout-high-intensity",
+          "energy": "user request",
+          "likes_acoustic": "workout-high-intensity",
+          "avoid_explicit": "workout-high-intensity",
+          "language": "personal-late-night-coding",
+          "strategy": "workout-high-intensity"
+        }
+      }
+    },
+    {
+      "step": 5,
+      "name": "recommend",
+      "elapsed_ms": 0.38,
+      "detail": {
+        "attempt": 1,
+        "strategy": "energy-focused",
+        "pool": 52,
+        "picks": [
+          "Thunder Gym Cycle",
+          "Bass Drop Odyssey",
+          "Storm Runner",
+          "Barbell Gospel"
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "name": "critique",
+      "elapsed_ms": 0.39,
+      "detail": {
+        "attempt": 1,
+        "passed": true,
+        "violations": []
+      }
+    },
+    {
+      "step": 7,
+      "name": "finalize",
+      "elapsed_ms": 0.4,
+      "detail": {
+        "status": "passed_critique",
+        "revisions": 0
+      }
+    }
+  ]
+}

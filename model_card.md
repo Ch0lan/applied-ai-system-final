@@ -1,3 +1,14 @@
+# 🎧 Model Card: Resonance (Module 5) — formerly VibeFinder (Module 3)
+
+> **Sections 10-14 are the Module 5 reflection** (AI collaboration, limitations and bias,
+> misuse, testing surprises, retrieval impact). Sections 1-9 are the original Module 3 model
+> card for VibeFinder 1.0, kept for provenance; where they describe a 17-song catalog and a
+> caller-supplied profile, that is the *base project*, not the current system.
+
+---
+
+# Part A — Module 3 model card (VibeFinder 1.0, retained for provenance)
+
 # 🎧 Model Card: Music Recommender Simulation
 
 ## 1. Model Name
@@ -160,3 +171,173 @@ To reduce "filter bubble" risk — one artist dominating every recommendation �
 ## 9. Personal Reflection
 
 The biggest learning moment was watching *Gym Hero* show up as a top-5 result for three unrelated profiles — it made concrete how a single dominant numeric feature (energy) can fake broad relevance even with zero genre or mood match, which is a small-scale preview of how real engagement-optimized feeds can over-recommend "safe," high-signal content. Using AI accelerated writing the CSV loader and the scoring/ranking boilerplate, but I had to double-check the actual weight values and the energy-similarity formula myself, since those are judgment calls (how much should genre outweigh mood?) that the AI can suggest but shouldn't decide alone. What surprised me most is how "smart" a completely hand-weighted, non-learned linear formula can feel — four numbers and a sort call produce results that read as genuinely tasteful for on-target profiles, which is a useful reminder that "personalization" doesn't require anything more sophisticated than a well-chosen scoring rule at small scale.
+
+---
+
+# Part B — Module 5 model card (Resonance)
+
+## 10. What Changed From the Base Project
+
+**Base project:** `ai110-module3show-musicrecommendersimulation-starter` (VibeFinder 1.0, Part A
+above) — a content-based recommender that scored a 17-song catalog against a `UserProfile` the
+caller supplied as explicit numeric values, and returned the top-k with reason strings.
+
+**Resonance** keeps that scoring rule byte-for-byte (`src/recommender.py`) and adds the pipeline
+around it:
+
+- a BM25 retrieval layer over nine listening-context documents in two sources (`src/retriever.py`)
+- a grounding layer that turns a sentence plus retrieved documents into the profile the scorer
+  needs, with a confidence score and full provenance per cue (`src/profile_builder.py`)
+- input validation and a seven-check output critic (`src/guardrails.py`)
+- an agent loop that revises its own answer up to twice before showing it (`src/agent.py`)
+- persisted reasoning traces and a run log (`src/trace.py`)
+- an evaluation harness that writes a report (`src/evaluate.py`)
+- a catalog grown from 17 to 52 songs across 5 languages
+
+**Intended use is unchanged in spirit and unchanged in scope:** a coursework demonstration of
+how retrieval, grounding, and self-checking fit together. It is not a product, the catalog is
+hand-written, and no listener has evaluated the taste of its output.
+
+## 11. Limitations and Bias
+
+**Corpus coverage is the ceiling on everything.** Nine documents define every situation the
+system understands. A request outside them either refuses (`NO_GROUNDING`) or, worse, retrieves
+the *nearest* document and answers confidently from the wrong context. The refusal is visible;
+the near-miss is not, and it is the failure mode I trust least.
+
+**Lexical retrieval biases toward my vocabulary.** BM25 matches words, not meaning, so "I need
+to zone in" fails where "focus" succeeds. The tags encode how *I* phrase things, in English.
+A user of another dialect — or another language — gets worse retrieval for identical intent,
+and the system will not know that happened.
+
+**The knowledge documents are opinions written as facts.** "Instrumental music is better for
+studying" and "sad listeners want mood-congruent music" are defensible generalizations that are
+wrong for plenty of individuals. Because those documents now *drive* the profile rather than
+merely describe it, my generalizations are enforced on every user who does not explicitly
+contradict them. The `overrides` mechanism is the mitigation: anything the listener states
+outright wins and is labelled in the output. It only helps listeners who know to state it.
+
+**Catalog composition bias, inherited and amplified.** 52 hand-written songs cannot represent a
+genre, a language, or a culture. English tracks outnumber every other language; Spanish, Korean,
+and Japanese have 4-6 tracks each, which is why "korean music for the gym" cannot fill a
+5-song request. Non-English requests will look worse to users than English ones for a reason
+that has nothing to do with the algorithm.
+
+**Confidence is not calibrated.** It is a weighted heuristic over retrieval strength, document
+agreement, and how much the user stated. It usefully orders "well-grounded" against "shaky", and
+it drives the `LOW_CONFIDENCE` check, but 0.71 does not mean 71% correct and should never be
+shown to a user as if it did.
+
+**Popularity is still in the scorer.** Inherited from Module 3, and the
+`language-and-culture` document explicitly warns that popularity weighting buries non-English
+catalogs. The current system does not lower that weight for language-specific requests — a known
+gap between what my own corpus says and what my code does.
+
+## 12. Retrieval Impact (before / after)
+
+Measured by `python -m src.evaluate --compare`. "Context fit" is the share of returned tracks
+whose energy is within ±0.2 of the target *and* whose genre or mood matches the situation.
+
+| Request | Ungrounded baseline | Retrieval-grounded | Delta |
+|---|---|---|---|
+| something calm for studying, no lyrics | 0% | 80% | +80 pts |
+| gym session, need something loud and hype | 60% | 100% | +40 pts |
+| cooking dinner for guests, keep it in the background | 0% | 80% | +80 pts |
+| help me fall asleep, nothing with singing | 0% | 60% | +60 pts |
+
+Concretely, for *"something calm for studying, no lyrics"*:
+
+- **Without retrieval** (`src/baseline.py`, popularity rank — what the base project does with no
+  profile): *Bass Drop Odyssey* (edm, energy 0.95), *Gym Hero* (pop, energy 0.93, explicit),
+  *Thunder Gym Cycle* (edm, 0.94), *Cherry Blossom Skyline* (k-pop, 0.80), *Sunrise City* (pop, 0.82). Every track is wrong, and one
+  is explicit in a request that implies a shared study space.
+- **With retrieval**: *Quiet Desk Lamp*, *Focus Flow*, *Signal From Europa*, *Deadline Sprint*,
+  *Glass Ballroom* — all instrumental, all energy 0.26-0.44, none explicit.
+
+The multi-source part matters too: `data/knowledge_user/personal-notes.md` carries
+`source_weight: 1.25`, so "late night coding on my side project" retrieves the personal note
+above the general study document and produces energy 0.42 rather than 0.35 — the note's whole
+point ("steady momentum" rather than "minimum stimulus") reaching the output.
+
+## 13. Misuse, and How It Is Constrained
+
+**Emotional targeting.** A system that reads a mood from a sentence and picks music to match it
+is one small step from a system that picks music to *keep* someone in that mood. The
+`sad-catharsis` document deliberately supports mood-congruent listening — that is the honest
+thing for ordinary sadness — but the same mechanism could be tuned for engagement rather than
+for the listener. Constraint: there is no engagement signal anywhere in the system. It has no
+memory across runs, no play/skip feedback, and nothing to optimize toward. Preserving that
+absence matters more than any filter I could add.
+
+**Crisis requests.** Emotional language is exactly what someone in crisis produces, and a
+playlist is the wrong response. `validate_query` matches crisis phrasing before any retrieval
+runs and returns a referral (988 in the US) instead of recommendations. It is a keyword filter:
+it will miss indirect phrasing, and it will occasionally refuse a song lyric quoted as a request.
+I chose the false-positive direction deliberately — a wrongly refused playlist costs a listener
+one retry.
+
+**Content exposure.** Explicit tracks are scored down, and hard-filtered out when the listener
+asks for clean. The `EXPLICIT_LEAK` check exists because scoring alone provably leaked: two
+explicit hip-hop tracks survived the −1.0 penalty on energy score. Nothing here verifies the
+`explicit` flag itself, which is hand-labelled in the CSV.
+
+**Overtrust in the explanations.** Every answer names the documents it used and shows the
+per-song arithmetic, which makes the system feel more authoritative than nine markdown files
+deserve. The mitigations are the visible confidence score, the printed unresolved warnings, and
+the refusal paths — the system is built to look uncertain when it is.
+
+## 14. AI Collaboration, and What Surprised Me in Testing
+
+**How I used AI.** I worked with Claude throughout: designing the layer boundaries (retriever /
+grounding / guardrails / agent, so each is testable alone), drafting the BM25 implementation and
+the knowledge corpus, writing test cases, and reviewing traces when the output looked wrong.
+The debugging loop was the most valuable part — I would paste a trace showing the wrong document
+winning retrieval, and we would work backwards to whether the cause was the corpus, the weights,
+or the merge rule.
+
+**One helpful suggestion.** When I described the guardrails as input-validation only, the
+suggestion was to make the critic run on the *finished recommendation list* and emit a fix code
+per violation, so the agent could map codes to concrete revision actions. That is what turned
+this from a pipeline into an agent: `EXPLICIT_LEAK → hard_filter_explicit` is the reason
+"clean hip-hop for lifting" returns zero explicit tracks even though the Module 3 scorer alone
+lets two through. Nothing in the original design would have caught that.
+
+**One flawed suggestion.** The first cue-merge implementation took every front-matter field from
+retrieved documents and treated them all as hard constraints of equal standing. It looked
+principled and produced a bug I did not see until I read a trace: for "gym session, loud and
+hype", my personal coding note outranked the workout document, so `language: instrumental` — a
+cue the listener never asked for — became a hard filter that cut the candidate pool down to the catalog's
+instrumental tracks only for a gym request. The suggestion was wrong because it flattened a real
+distinction. The fix was structural: `critique_recommendations` now takes `user_stated`, and
+only preferences the listener expressed in their own words are enforced as filters; retrieved
+cues stay soft scoring signals. A related version of the same mistake hit `relax_constraints`,
+which "helpfully" restored the full catalog after a short list and discarded the Spanish filter
+a Spanish speaker had explicitly asked for.
+
+**What surprised me.** Three things.
+
+First, **the self-correcting agent was easier to get working than the retriever was to get
+right.** The loop worked on the first run; the corpus took four rounds of tuning. Nearly every
+real failure was a retrieval failure wearing a reasoning failure's clothes — a missing `asleep`
+tag, an ambiguous `sprint` tag, a source weight 0.35 too high. The intelligence of the system
+lives in the documents, not in the loop over them.
+
+Second, **a self-correction can make the answer worse**, and it will look like a success in the
+logs. The `relax_constraints` bug printed a confident "relaxed genre constraint" line while
+quietly deleting the user's language filter. A critic that can revise needs its revisions
+checked as carefully as its original answers.
+
+Third, **10/10 passing means less than it looks like**, because I wrote the cases after watching
+the system run. The suite is a strong regression guard and weak evidence of quality. The four
+bugs above were found by reading traces and by tests that failed for reasons I did not
+anticipate — not by the green summary line.
+
+## 15. Future Work
+
+- Swap or supplement BM25 with sentence embeddings so paraphrases stop falling into
+  `NO_GROUNDING`, and measure the change with the existing `--compare` harness.
+- Lower the popularity weight on language-specific requests, which is what my own
+  `language-and-culture` document already argues for.
+- Calibrate confidence against human judgments rather than internal retrieval signals.
+- Have real listeners rate the top-5 for a set of requests — the one thing no amount of
+  self-critique can substitute for.

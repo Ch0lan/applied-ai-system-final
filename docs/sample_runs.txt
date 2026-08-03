@@ -1,0 +1,242 @@
+$ python -m src.cli "something calm for studying, no lyrics" --k 5 --trace
+
+Request: something calm for studying, no lyrics
+Grounded in: personal-late-night-coding (4.42), sleep-winddown (3.50), language-and-culture (3.42)
+Profile: genre=lofi mood=focused energy=0.25 language=instrumental avoid_explicit=True strategy=mood-first
+Confidence: 0.52
+Stated by you (overrode retrieval): energy, language
+
++-----+--------------------+----------------+-----------+----------+------------+---------+
+|   # | Title              | Artist         | Genre     |   Energy | Explicit   |   Score |
++=====+====================+================+===========+==========+============+=========+
+|   1 | Quiet Desk Lamp    | Paper Lanterns | lofi      |     0.33 | no         |    4.42 |
++-----+--------------------+----------------+-----------+----------+------------+---------+
+|   2 | Focus Flow         | LoRoom         | lofi      |     0.4  | no         |    4.35 |
++-----+--------------------+----------------+-----------+----------+------------+---------+
+|   3 | Signal From Europa | Orbit Bloom    | ambient   |     0.3  | no         |    3.45 |
++-----+--------------------+----------------+-----------+----------+------------+---------+
+|   4 | Deadline Sprint    | LoRoom         | lofi      |     0.44 | no         |    3.31 |
++-----+--------------------+----------------+-----------+----------+------------+---------+
+|   5 | Glass Ballroom     | Clara Nyquist  | classical |     0.26 | no         |    0.99 |
++-----+--------------------+----------------+-----------+----------+------------+---------+
+
+Why these:
+  Quiet Desk Lamp - genre match (+1.0), mood match (+2.5), energy similarity (+0.92), too acoustic for preference (-0.5), language match (+0.5)
+  Focus Flow - genre match (+1.0), mood match (+2.5), energy similarity (+0.85), too acoustic for preference (-0.5), language match (+0.5)
+  Signal From Europa - mood match (+2.5), energy similarity (+0.95), too acoustic for preference (-0.5), language match (+0.5)
+  Deadline Sprint - genre match (+1.0), mood match (+2.5), energy similarity (+0.81), too acoustic for preference (-0.5), language match (+0.5), artist diversity penalty (-1.0)
+  Glass Ballroom - energy similarity (+0.99), too acoustic for preference (-0.5), language match (+0.5)
+
+Trace b682474e | query: 'something calm for studying, no lyrics'
+  1. validate_input         ok=True, code=, reason=
+  2. plan                   tools=['retrieve', 'ground', 'rank', 'critique'], max_revisions=2
+  3. retrieve               k=3, hits=['personal-late-night-coding(4.42)', 'sleep-winddown(3.50)', 'language-and-culture(3.42)']
+  4. ground                 prefs={'genre': 'lofi', 'mood': 'focused', 'energy': 0.25, 'likes_acoustic': False, 'avoid_explicit': True, 'language': 'instrumental'}, ...
+  5. recommend              attempt=1, strategy=mood-first, pool=52, picks=['Quiet Desk Lamp', 'Focus Flow', 'Signal From Europa', 'Deadline Sprint', 'Glass Ballroom']
+  6. critique               attempt=1, passed=True, violations=[]
+  7. finalize               status=passed_critique, revisions=0
+
+----------------------------------------------------------------------
+
+$ python -m src.cli "gym session, need something loud and hype" --k 4
+
+Request: gym session, need something loud and hype
+Grounded in: workout-high-intensity (11.07), personal-late-night-coding (2.74), party-social (2.32)
+Profile: genre=edm mood=intense energy=0.90 language=instrumental avoid_explicit=False strategy=energy-focused
+Confidence: 0.73
+Stated by you (overrode retrieval): energy
+
++-----+-------------------+--------------+---------+----------+------------+---------+
+|   # | Title             | Artist       | Genre   |   Energy | Explicit   |   Score |
++=====+===================+==============+=========+==========+============+=========+
+|   1 | Thunder Gym Cycle | Max Pulse    | edm     |     0.94 | no         |    4.38 |
++-----+-------------------+--------------+---------+----------+------------+---------+
+|   2 | Bass Drop Odyssey | Volt Circuit | edm     |     0.95 | no         |    4.35 |
++-----+-------------------+--------------+---------+----------+------------+---------+
+|   3 | Storm Runner      | Voltline     | rock    |     0.91 | no         |    3.47 |
++-----+-------------------+--------------+---------+----------+------------+---------+
+|   4 | Barbell Gospel    | Rae Solstice | hip-hop |     0.89 | yes        |    3.47 |
++-----+-------------------+--------------+---------+----------+------------+---------+
+
+Why these:
+  Thunder Gym Cycle - genre match (+1.0), mood match (+0.5), energy similarity (+2.88)
+  Bass Drop Odyssey - genre match (+1.0), energy similarity (+2.85), language match (+0.5)
+  Storm Runner - mood match (+0.5), energy similarity (+2.97)
+  Barbell Gospel - mood match (+0.5), energy similarity (+2.97)
+
+----------------------------------------------------------------------
+
+$ python -m src.cli "clean hip-hop for lifting" --k 4 --trace
+
+Request: clean hip-hop for lifting
+Grounded in: workout-high-intensity (7.15)
+Profile: genre=hip-hop mood=intense energy=0.90 language=- avoid_explicit=True strategy=energy-focused
+Confidence: 0.89
+Stated by you (overrode retrieval): avoid_explicit, genre
+
+Self-corrections:
+  - EXPLICIT_LEAK -> hard-filtered explicit tracks out of the candidate pool (45 left)
+
++-----+-------------------+--------------+------------+----------+------------+---------+
+|   # | Title             | Artist       | Genre      |   Energy | Explicit   |   Score |
++=====+===================+==============+============+==========+============+=========+
+|   1 | Block Party Dawn  | Kilo Verse   | hip-hop    |     0.78 | no         |    3.64 |
++-----+-------------------+--------------+------------+----------+------------+---------+
+|   2 | Storm Runner      | Voltline     | rock       |     0.91 | no         |    3.47 |
++-----+-------------------+--------------+------------+----------+------------+---------+
+|   3 | Kilometro Cero    | Sombra Clara | latin rock |     0.88 | no         |    3.44 |
++-----+-------------------+--------------+------------+----------+------------+---------+
+|   4 | Thunder Gym Cycle | Max Pulse    | edm        |     0.94 | no         |    3.38 |
++-----+-------------------+--------------+------------+----------+------------+---------+
+
+Why these:
+  Block Party Dawn - genre match (+1.0), energy similarity (+2.64)
+  Storm Runner - mood match (+0.5), energy similarity (+2.97)
+  Kilometro Cero - mood match (+0.5), energy similarity (+2.94)
+  Thunder Gym Cycle - mood match (+0.5), energy similarity (+2.88)
+
+Trace 538ba59b | query: 'clean hip-hop for lifting'
+  1. validate_input         ok=True, code=, reason=
+  2. plan                   tools=['retrieve', 'ground', 'rank', 'critique'], max_revisions=2
+  3. retrieve               k=3, hits=['workout-high-intensity(7.15)']
+  4. ground                 prefs={'genre': 'hip-hop', 'mood': 'intense', 'energy': 0.9, 'likes_acoustic': False, 'avoid_explicit': True}, strategy=energy-focused, c...
+  5. recommend              attempt=1, strategy=energy-focused, pool=52, picks=['Block Party Dawn', 'Storm Runner', 'Barbell Gospel', 'Kilometro Cero']
+  6. critique               attempt=1, passed=False, violations=['EXPLICIT_LEAK']
+  7. revise                 attempt=1, applied=['EXPLICIT_LEAK -> hard-filtered explicit tracks out of the candidate pool (45 left)']
+  8. recommend              attempt=2, strategy=energy-focused, pool=45, picks=['Block Party Dawn', 'Storm Runner', 'Kilometro Cero', 'Thunder Gym Cycle']
+  9. critique               attempt=2, passed=True, violations=[]
+  10. finalize               status=passed_critique, revisions=1
+
+----------------------------------------------------------------------
+
+$ python -m src.cli "spanish music for a road trip" --k 4
+
+Request: spanish music for a road trip
+Grounded in: commute-driving (7.12), language-and-culture (4.20), personal-late-night-coding (0.86)
+Profile: genre=synthwave mood=moody energy=0.70 language=spanish avoid_explicit=False strategy=balanced
+Confidence: 0.67
+Stated by you (overrode retrieval): language
+
+Self-corrections:
+  - LANGUAGE_MISS -> restricted candidate pool to language=spanish (6 left)
+
++-----+--------------------+--------------+------------+----------+------------+---------+
+|   # | Title              | Artist       | Genre      |   Energy | Explicit   |   Score |
++=====+====================+==============+============+==========+============+=========+
+|   1 | Autopista Nocturna | Los Faros    | latin rock |     0.69 | no         |    2.99 |
++-----+--------------------+--------------+------------+----------+------------+---------+
+|   2 | Ruta del Sol       | Mar Adentro  | latin pop  |     0.74 | no         |    1.94 |
++-----+--------------------+--------------+------------+----------+------------+---------+
+|   3 | Kilometro Cero     | Sombra Clara | latin rock |     0.88 | no         |    1.73 |
++-----+--------------------+--------------+------------+----------+------------+---------+
+|   4 | Corazon Electrico  | Mar Adentro  | latin pop  |     0.85 | no         |    0.77 |
++-----+--------------------+--------------+------------+----------+------------+---------+
+
+Why these:
+  Autopista Nocturna - mood match (+1.0), energy similarity (+1.49), language match (+0.5)
+  Ruta del Sol - energy similarity (+1.44), language match (+0.5)
+  Kilometro Cero - energy similarity (+1.23), language match (+0.5)
+  Corazon Electrico - energy similarity (+1.27), language match (+0.5), artist diversity penalty (-1.0)
+
+----------------------------------------------------------------------
+
+$ python -m src.cli "late night coding on my side project" --k 4
+
+Request: late night coding on my side project
+Grounded in: personal-late-night-coding (19.88), study-focus (2.21), commute-driving (2.13)
+Profile: genre=lofi mood=focused energy=0.44 language=instrumental avoid_explicit=True strategy=mood-first
+Confidence: 0.77
+
++-----+--------------------+----------------+---------+----------+------------+---------+
+|   # | Title              | Artist         | Genre   |   Energy | Explicit   |   Score |
++=====+====================+================+=========+==========+============+=========+
+|   1 | Deadline Sprint    | LoRoom         | lofi    |     0.44 | no         |    4.5  |
++-----+--------------------+----------------+---------+----------+------------+---------+
+|   2 | Quiet Desk Lamp    | Paper Lanterns | lofi    |     0.33 | no         |    4.39 |
++-----+--------------------+----------------+---------+----------+------------+---------+
+|   3 | Focus Flow         | LoRoom         | lofi    |     0.4  | no         |    3.46 |
++-----+--------------------+----------------+---------+----------+------------+---------+
+|   4 | Signal From Europa | Orbit Bloom    | ambient |     0.3  | no         |    3.36 |
++-----+--------------------+----------------+---------+----------+------------+---------+
+
+Why these:
+  Deadline Sprint - genre match (+1.0), mood match (+2.5), energy similarity (+1.00), too acoustic for preference (-0.5), language match (+0.5)
+  Quiet Desk Lamp - genre match (+1.0), mood match (+2.5), energy similarity (+0.89), too acoustic for preference (-0.5), language match (+0.5)
+  Focus Flow - genre match (+1.0), mood match (+2.5), energy similarity (+0.96), too acoustic for preference (-0.5), language match (+0.5), artist diversity penalty (-1.0)
+  Signal From Europa - mood match (+2.5), energy similarity (+0.86), too acoustic for preference (-0.5), language match (+0.5)
+
+----------------------------------------------------------------------
+
+$ python -m src.cli "" 
+
+20:57:05 WARNING rejected request (EMPTY_INPUT): empty request
+REFUSED [EMPTY_INPUT]
+Tell me what you want to listen to, e.g. 'something calm for studying'.
+
+----------------------------------------------------------------------
+
+$ python -m src.cli "zzzz qqqq wwww vvvv"
+
+20:57:05 WARNING no knowledge document matched 'zzzz qqqq wwww vvvv'
+REFUSED [NO_GROUNDING]
+Nothing in the listening-context knowledge base matched that request, so there is no grounded profile to recommend from. Try naming the situation (studying, workout, party, driving, dinner, sleep) or a genre.
+
+----------------------------------------------------------------------
+
+$ python -m src.cli "sad songs because i want to kill myself"
+
+20:57:05 WARNING rejected request (OUT_OF_SCOPE): request matches crisis-referral pattern
+REFUSED [OUT_OF_SCOPE]
+This system only picks music and is not a source of mental-health support. If you are in crisis, please contact a local emergency number or, in the US, call or text 988 (Suicide & Crisis Lifeline).
+
+----------------------------------------------------------------------
+
+$ python -m src.cli --show-sources
+
+Indexed knowledge sources:
+  data/knowledge               8 document(s)
+  data/knowledge_user          1 document(s)
+  - commute-driving            Commuting, Driving, and Night Drives [weight 1.0]
+  - dinner-background          Dinner, Cooking, and Background Listening [weight 1.0]
+  - language-and-culture       Language Preference and Non-English Catalogs [weight 1.0]
+  - party-social               Parties, Dancing, and Social Gatherings [weight 1.0]
+  - sad-catharsis              Sadness, Heartbreak, and Cathartic Listening [weight 1.0]
+  - sleep-winddown             Sleep, Wind-Down, and Anxiety Relief [weight 1.0]
+  - study-focus                Deep Focus, Studying, and Long Work Sessions [weight 1.0]
+  - workout-high-intensity     High-Intensity Workouts, Lifting, and Cardio [weight 1.0]
+  - personal-late-night-coding Personal Note - Late Night Coding Sessions [weight 1.2]
+
+----------------------------------------------------------------------
+
+$ python -m src.cli "korean music for the gym" --k 5
+
+21:00:26 WARNING run c6f890dc finished with 1 unresolved violation(s): SHORT_LIST
+Request: korean music for the gym
+Grounded in: language-and-culture (3.99), workout-high-intensity (3.68), personal-late-night-coding (0.86)
+Profile: genre=- mood=happy energy=0.78 language=korean avoid_explicit=False strategy=balanced
+Confidence: 0.43
+Stated by you (overrode retrieval): language
+
+Self-corrections:
+  - LANGUAGE_MISS -> restricted candidate pool to language=korean (4 left)
+  - SHORT_LIST -> relaxed the genre constraint (4 candidates); kept language=korean
+
++-----+-------------------------+---------------+---------+----------+------------+---------+
+|   # | Title                   | Artist        | Genre   |   Energy | Explicit   |   Score |
++=====+=========================+===============+=========+==========+============+=========+
+|   1 | Paper Planes Over Kyoto | Yuna Prism    | k-pop   |     0.78 | no         |    3    |
++-----+-------------------------+---------------+---------+----------+------------+---------+
+|   2 | Seoul Rain Letter       | Han Sol Bloom | k-pop   |     0.46 | no         |    1.52 |
++-----+-------------------------+---------------+---------+----------+------------+---------+
+|   3 | Cherry Blossom Skyline  | Yuna Prism    | k-pop   |     0.8  | no         |    0.97 |
++-----+-------------------------+---------------+---------+----------+------------+---------+
+
+Why these:
+  Paper Planes Over Kyoto - mood match (+1.0), energy similarity (+1.50), language match (+0.5)
+  Seoul Rain Letter - energy similarity (+1.02), language match (+0.5)
+  Cherry Blossom Skyline - energy similarity (+1.47), language match (+0.5), artist diversity penalty (-1.0)
+
+WARNING - unresolved after 2 revision(s):
+  [SHORT_LIST] asked for 5 songs, got 3
+
+----------------------------------------------------------------------

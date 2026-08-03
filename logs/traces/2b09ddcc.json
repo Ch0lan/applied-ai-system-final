@@ -1,0 +1,108 @@
+{
+  "run_id": "2b09ddcc",
+  "query": "metal but calm and quiet",
+  "started_at": 1785729607.9011688,
+  "steps": [
+    {
+      "step": 1,
+      "name": "validate_input",
+      "elapsed_ms": 0.01,
+      "detail": {
+        "ok": true,
+        "code": "",
+        "reason": ""
+      }
+    },
+    {
+      "step": 2,
+      "name": "plan",
+      "elapsed_ms": 0.03,
+      "detail": {
+        "tools": [
+          "retrieve",
+          "ground",
+          "rank",
+          "critique"
+        ],
+        "max_revisions": 2
+      }
+    },
+    {
+      "step": 3,
+      "name": "retrieve",
+      "elapsed_ms": 0.06,
+      "detail": {
+        "k": 3,
+        "hits": [
+          "sleep-winddown(6.20)"
+        ]
+      }
+    },
+    {
+      "step": 4,
+      "name": "ground",
+      "elapsed_ms": 0.69,
+      "detail": {
+        "prefs": {
+          "genre": "metal",
+          "mood": "peaceful",
+          "energy": 0.25,
+          "likes_acoustic": true,
+          "avoid_explicit": true,
+          "language": "instrumental"
+        },
+        "strategy": "energy-focused",
+        "confidence": 0.815,
+        "overrides": [
+          "energy",
+          "genre"
+        ],
+        "provenance": {
+          "genre": "user request",
+          "mood": "sleep-winddown",
+          "energy": "user request",
+          "likes_acoustic": "sleep-winddown",
+          "avoid_explicit": "sleep-winddown",
+          "language": "sleep-winddown",
+          "strategy": "sleep-winddown"
+        }
+      }
+    },
+    {
+      "step": 5,
+      "name": "recommend",
+      "elapsed_ms": 1.04,
+      "detail": {
+        "attempt": 1,
+        "strategy": "energy-focused",
+        "pool": 52,
+        "picks": [
+          "Morning Adagio",
+          "Moonlit Sonata Dreams",
+          "Deep Field Drift",
+          "Quiet Desk Lamp",
+          "Focus Flow"
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "name": "critique",
+      "elapsed_ms": 1.07,
+      "detail": {
+        "attempt": 1,
+        "passed": true,
+        "violations": []
+      }
+    },
+    {
+      "step": 7,
+      "name": "finalize",
+      "elapsed_ms": 1.09,
+      "detail": {
+        "status": "passed_critique",
+        "revisions": 0
+      }
+    }
+  ]
+}

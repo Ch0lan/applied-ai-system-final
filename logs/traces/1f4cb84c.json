@@ -1,0 +1,46 @@
+{
+  "run_id": "1f4cb84c",
+  "query": "zzzz qqqq wwww vvvv",
+  "started_at": 1785729289.6227999,
+  "steps": [
+    {
+      "step": 1,
+      "name": "validate_input",
+      "elapsed_ms": 0.0,
+      "detail": {
+        "ok": true,
+        "code": "",
+        "reason": ""
+      }
+    },
+    {
+      "step": 2,
+      "name": "plan",
+      "elapsed_ms": 0.02,
+      "detail": {
+        "tools": [
+          "retrieve",
+          "ground",
+          "rank",
+          "critique"
+        ],
+        "max_revisions": 2
+      }
+    },
+    {
+      "step": 3,
+      "name": "retrieve",
+      "elapsed_ms": 0.04,
+      "detail": {
+        "k": 3,
+        "hits": []
+      }
+    },
+    {
+      "step": 4,
+      "name": "no_grounding",
+      "elapsed_ms": 0.05,
+      "detail": {}
+    }
+  ]
+}

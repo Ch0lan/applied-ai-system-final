@@ -1,7 +1,7 @@
 ---
 id: sleep-winddown
 title: Sleep, Wind-Down, and Anxiety Relief
-tags: sleep, sleeping, bedtime, wind down, winddown, calm, calming, relax, relaxing, anxiety, stress, unwind, meditation, insomnia, night, quiet
+tags: sleep, sleeping, asleep, fall asleep, tired, bedtime, wind down, winddown, calm, calming, relax, relaxing, anxiety, stress, unwind, meditation, insomnia, night, quiet
 genre: ambient
 mood: peaceful
 energy: 0.2

@@ -1,0 +1,144 @@
+{
+  "run_id": "538ba59b",
+  "query": "clean hip-hop for lifting",
+  "started_at": 1785729425.794009,
+  "steps": [
+    {
+      "step": 1,
+      "name": "validate_input",
+      "elapsed_ms": 0.01,
+      "detail": {
+        "ok": true,
+        "code": "",
+        "reason": ""
+      }
+    },
+    {
+      "step": 2,
+      "name": "plan",
+      "elapsed_ms": 0.03,
+      "detail": {
+        "tools": [
+          "retrieve",
+          "ground",
+          "rank",
+          "critique"
+        ],
+        "max_revisions": 2
+      }
+    },
+    {
+      "step": 3,
+      "name": "retrieve",
+      "elapsed_ms": 0.06,
+      "detail": {
+        "k": 3,
+        "hits": [
+          "workout-high-intensity(7.15)"
+        ]
+      }
+    },
+    {
+      "step": 4,
+      "name": "ground",
+      "elapsed_ms": 0.64,
+      "detail": {
+        "prefs": {
+          "genre": "hip-hop",
+          "mood": "intense",
+          "energy": 0.9,
+          "likes_acoustic": false,
+          "avoid_explicit": true
+        },
+        "strategy": "energy-focused",
+        "confidence": 0.886,
+        "overrides": [
+          "avoid_explicit",
+          "genre"
+        ],
+        "provenance": {
+          "genre": "user request",
+          "mood": "workout-high-intensity",
+          "energy": "workout-high-intensity",
+          "likes_acoustic": "workout-high-intensity",
+          "avoid_explicit": "user request",
+          "strategy": "workout-high-intensity"
+        }
+      }
+    },
+    {
+      "step": 5,
+      "name": "recommend",
+      "elapsed_ms": 0.98,
+      "detail": {
+        "attempt": 1,
+        "strategy": "energy-focused",
+        "pool": 52,
+        "picks": [
+          "Block Party Dawn",
+          "Storm Runner",
+          "Barbell Gospel",
+          "Kilometro Cero"
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "name": "critique",
+      "elapsed_ms": 1.0,
+      "detail": {
+        "attempt": 1,
+        "passed": false,
+        "violations": [
+          "EXPLICIT_LEAK"
+        ]
+      }
+    },
+    {
+      "step": 7,
+      "name": "revise",
+      "elapsed_ms": 1.02,
+      "detail": {
+        "attempt": 1,
+        "applied": [
+          "EXPLICIT_LEAK -> hard-filtered explicit tracks out of the candidate pool (45 left)"
+        ]
+      }
+    },
+    {
+      "step": 8,
+      "name": "recommend",
+      "elapsed_ms": 1.24,
+      "detail": {
+        "attempt": 2,
+        "strategy": "energy-focused",
+        "pool": 45,
+        "picks": [
+          "Block Party Dawn",
+          "Storm Runner",
+          "Kilometro Cero",
+          "Thunder Gym Cycle"
+        ]
+      }
+    },
+    {
+      "step": 9,
+      "name": "critique",
+      "elapsed_ms": 1.26,
+      "detail": {
+        "attempt": 2,
+        "passed": true,
+        "violations": []
+      }
+    },
+    {
+      "step": 10,
+      "name": "finalize",
+      "elapsed_ms": 1.28,
+      "detail": {
+        "status": "passed_critique",
+        "revisions": 1
+      }
+    }
+  ]
+}

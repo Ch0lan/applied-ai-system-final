@@ -1,0 +1,108 @@
+{
+  "run_id": "96327fa4",
+  "query": "lofi for focus",
+  "started_at": 1785729582.813885,
+  "steps": [
+    {
+      "step": 1,
+      "name": "validate_input",
+      "elapsed_ms": 0.01,
+      "detail": {
+        "ok": true,
+        "code": "",
+        "reason": ""
+      }
+    },
+    {
+      "step": 2,
+      "name": "plan",
+      "elapsed_ms": 0.03,
+      "detail": {
+        "tools": [
+          "retrieve",
+          "ground",
+          "rank",
+          "critique"
+        ],
+        "max_revisions": 2
+      }
+    },
+    {
+      "step": 3,
+      "name": "retrieve",
+      "elapsed_ms": 0.06,
+      "detail": {
+        "k": 3,
+        "hits": [
+          "study-focus(5.58)"
+        ]
+      }
+    },
+    {
+      "step": 4,
+      "name": "ground",
+      "elapsed_ms": 0.69,
+      "detail": {
+        "prefs": {
+          "genre": "lofi",
+          "mood": "focused",
+          "energy": 0.35,
+          "likes_acoustic": true,
+          "avoid_explicit": true,
+          "language": "instrumental"
+        },
+        "strategy": "mood-first",
+        "confidence": 0.718,
+        "overrides": [
+          "genre"
+        ],
+        "provenance": {
+          "genre": "user request",
+          "mood": "study-focus",
+          "energy": "study-focus",
+          "likes_acoustic": "study-focus",
+          "avoid_explicit": "study-focus",
+          "language": "study-focus",
+          "strategy": "study-focus"
+        }
+      }
+    },
+    {
+      "step": 5,
+      "name": "recommend",
+      "elapsed_ms": 1.03,
+      "detail": {
+        "attempt": 1,
+        "strategy": "mood-first",
+        "pool": 52,
+        "picks": [
+          "Quiet Desk Lamp",
+          "Focus Flow",
+          "Signal From Europa",
+          "Deadline Sprint",
+          "Library Rain",
+          "Blue Note Curfew"
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "name": "critique",
+      "elapsed_ms": 1.06,
+      "detail": {
+        "attempt": 1,
+        "passed": true,
+        "violations": []
+      }
+    },
+    {
+      "step": 7,
+      "name": "finalize",
+      "elapsed_ms": 1.07,
+      "detail": {
+        "status": "passed_critique",
+        "revisions": 0
+      }
+    }
+  ]
+}

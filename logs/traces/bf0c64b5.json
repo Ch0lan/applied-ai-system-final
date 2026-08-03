@@ -1,0 +1,17 @@
+{
+  "run_id": "bf0c64b5",
+  "query": "sad songs because i want to kill myself",
+  "started_at": 1785729289.6229959,
+  "steps": [
+    {
+      "step": 1,
+      "name": "validate_input",
+      "elapsed_ms": 0.01,
+      "detail": {
+        "ok": false,
+        "code": "OUT_OF_SCOPE",
+        "reason": "request matches crisis-referral pattern"
+      }
+    }
+  ]
+}

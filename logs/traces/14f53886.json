@@ -1,0 +1,107 @@
+{
+  "run_id": "14f53886",
+  "query": "classical for a workout",
+  "started_at": 1785729607.9420412,
+  "steps": [
+    {
+      "step": 1,
+      "name": "validate_input",
+      "elapsed_ms": 0.01,
+      "detail": {
+        "ok": true,
+        "code": "",
+        "reason": ""
+      }
+    },
+    {
+      "step": 2,
+      "name": "plan",
+      "elapsed_ms": 0.03,
+      "detail": {
+        "tools": [
+          "retrieve",
+          "ground",
+          "rank",
+          "critique"
+        ],
+        "max_revisions": 2
+      }
+    },
+    {
+      "step": 3,
+      "name": "retrieve",
+      "elapsed_ms": 0.06,
+      "detail": {
+        "k": 3,
+        "hits": [
+          "workout-high-intensity(3.31)",
+          "dinner-background(1.11)",
+          "sad-catharsis(1.05)"
+        ]
+      }
+    },
+    {
+      "step": 4,
+      "name": "ground",
+      "elapsed_ms": 0.56,
+      "detail": {
+        "prefs": {
+          "genre": "classical",
+          "mood": "intense",
+          "energy": 0.693,
+          "likes_acoustic": false,
+          "avoid_explicit": false
+        },
+        "strategy": "energy-focused",
+        "confidence": 0.381,
+        "overrides": [
+          "genre"
+        ],
+        "provenance": {
+          "genre": "user request",
+          "mood": "workout-high-intensity",
+          "energy": "workout-high-intensity+dinner-background+sad-catharsis",
+          "likes_acoustic": "workout-high-intensity",
+          "avoid_explicit": "workout-high-intensity",
+          "strategy": "workout-high-intensity"
+        }
+      }
+    },
+    {
+      "step": 5,
+      "name": "recommend",
+      "elapsed_ms": 0.9,
+      "detail": {
+        "attempt": 1,
+        "strategy": "energy-focused",
+        "pool": 52,
+        "picks": [
+          "Autopista Nocturna",
+          "Amp Feedback Waltz",
+          "City Lights Anthem",
+          "Tokyo Underpass",
+          "Festival Fireflies"
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "name": "critique",
+      "elapsed_ms": 0.92,
+      "detail": {
+        "attempt": 1,
+        "passed": true,
+        "violations": []
+      }
+    },
+    {
+      "step": 7,
+      "name": "finalize",
+      "elapsed_ms": 0.94,
+      "detail": {
+        "status": "passed_critique",
+        "revisions": 0
+      }
+    }
+  ]
+}

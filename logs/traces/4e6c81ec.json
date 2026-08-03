@@ -1,0 +1,17 @@
+{
+  "run_id": "4e6c81ec",
+  "query": "",
+  "started_at": 1785729425.916448,
+  "steps": [
+    {
+      "step": 1,
+      "name": "validate_input",
+      "elapsed_ms": 0.0,
+      "detail": {
+        "ok": false,
+        "code": "EMPTY_INPUT",
+        "reason": "empty request"
+      }
+    }
+  ]
+}
