@@ -308,7 +308,7 @@ request, and the system says what it is instead of guessing.
 
 ## Reliability and evaluation
 
-Three layers, all reproducible from the command line.
+Four layers plus a style check, all reproducible from the command line.
 
 ### Layer 1 — evaluation harness
 
@@ -542,7 +542,7 @@ in [`ai_interactions.md`](ai_interactions.md).
 **Loom walkthrough:** not recorded. All grading evidence in this README is text-based and
 reproducible from the commands above.
 
-## Reflection
+## Reflection: what this taught me
 
 What this project taught me about AI and problem-solving is that almost none of the difficulty
 was in the "AI" part. The agent loop — plan, act, critique, revise — worked on its first run.
